@@ -15,7 +15,7 @@
 #define FALSE 0
 
 //////////////////////////////////////////////////////////////////////////////////////////
-#define DEBUG_MODE FALSE             //  Modo debug TRUE / FALSE                         //
+#define DEBUG_MODE FALSE           //  Modo debug TRUE / FALSE                         //
 #define PATH_MODE FALSE             //  Modo de caminho especificado TRUE / FALSE       //
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -30,7 +30,7 @@ static int nArticles = 0;           //  numero total de Artigos
 static int nJournals = 0;           //  numero de Artigos em Revista
 static int nConference = 0;         //  numero de Artigos em Conferencia
 static int minPag = 0;              //  numero de Pag minimo para artigos
-static char * listaTXT = "/Users/axelferreira/Desktop/dir/lista.txt";   //Endereço do ficheiro lista.txt
+static char * listaTXT[50]=strcpy( listaTXT, "/Users/axelferreira/Desktop/dir/lista.txt");   //Endereço do ficheiro lista.txt
 static char * E_PATH = "/Users/axelferreira/Desktop/dir/E.txt";         // Nome do ficheiro E.txt
 static char * E_NAME = "E.txt";
 static char * D_PATH = "/Users/axelferreira/Desktop/dir/D.txt";         // Dir dos ficheiros d
@@ -196,7 +196,7 @@ void imprimeD()                              // FUNCAO COMPLETA
 
 int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
 {   int ret=TRUE, cont_rej_local=0, i=0,j=0;
-    char *tofree, *token, *string;
+    char *tofree=NULL, *token=NULL, *string=NULL;
     char *fileName = malloc(200*sizeof(char));
     // Cria caminho do ficheiro
     if (PATH_MODE == TRUE)  {   strcpy(fileName,PATH);
@@ -208,7 +208,7 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
     FILE * ficheiro = fopen(fileName, "r");
     if (ficheiro)
     {   char * bLine = malloc(MAX_BUFFER_ENTRY * sizeof(char));
-                if(DEBUG_MODE==TRUE) {printf("\n\n--------------------------------------------------------------------------------\n\t\t\t\t\t%s\n--------------------------------------------------------------------------------\n",fileN);}
+                if(DEBUG_MODE==TRUE) {printf("%s\n",fileN);}
         //le inha a linha do ficheiro
         while (fgets(bLine, MAX_BUFFER_ENTRY, ficheiro))
         { int flag = TRUE;
@@ -244,7 +244,7 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
                     else { flag = validaTitulo(token); }
                 }
             if (tipo == JOURNAL) ///////// J O U R N A L /////////
-            {
+            { char * whatever=tofree;
                 if(flag==TRUE)  // Nome Journal
                 {   if (string[0] == ' ') {string++;}
                     token = strsep(&string, "(");
@@ -289,16 +289,26 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
                 {   // Valida o ano
                     flag = validaAno(string);
                 }
+                if (!flag)  {   if (DEBUG_MODE==TRUE)
+                                {   token  = strsep(&whatever, " ");
+                                    printf("%s\n", token);
+                                }
+                            }
             }
             else ///////// C O N F E R E N C E /////////
-            {   if(flag==TRUE)  // Nome Conferencia e Data
+            { char * whatever=tofree;
+                if(flag==TRUE)  // Nome Conferencia e Data
                 {   if (string[0] == ' ') {string++;}
                     token = strsep(&string, ":");
                     flag = validaNomeConfData(token); }
                 if(flag==TRUE)  // Paginas Conferencia
                 {   flag = validaPaginas(string); }
                 
-                if (!flag) {printf("\nFALHA:%s\n", tofree);}
+                if (!flag)  {   if(DEBUG_MODE==TRUE) {  printf("\nFALHA:%s\n", tofree); }
+                                if(DEBUG_MODE==TRUE) {  token  = strsep(&whatever, " ");
+                                                        printf("%s\n", token);
+                                                     }
+                            }
 
             }
             
@@ -309,7 +319,6 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
                 {incnJournals();}
                 else {incnConferences();}
                 if(DEBUG_MODE==TRUE) {printf("ACEITADA\n\n");}
-                token =strsep(&tofree, " ");
             }
             else {  incnRejected();
                     cont_rej_local++;
