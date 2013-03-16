@@ -15,7 +15,7 @@
 #define FALSE 0
 
 //////////////////////////////////////////////////////////////////////////////////////////
-#define DEBUG_MODE FALSE             //  Modo debug TRUE / FALSE                         //
+#define DEBUG_MODE FALSE            //  Modo debug TRUE / FALSE                         //
 #define PATH_MODE FALSE             //  Modo de caminho especificado TRUE / FALSE       //
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -30,13 +30,13 @@ static int nArticles = 0;           //  numero total de Artigos
 static int nJournals = 0;           //  numero de Artigos em Revista
 static int nConference = 0;         //  numero de Artigos em Conferencia
 static int minPag = 0;              //  numero de Pag minimo para artigos
-static char * listaTXT = "/Users/axelferreira/Desktop/dir/lista.txt";   //Endereço do ficheiro lista.txt
-static char * E_PATH = "/Users/axelferreira/Desktop/dir/E.txt";         // Nome do ficheiro E.txt
-static char * E_NAME = "E.txt";
-static char * D_PATH = "/Users/axelferreira/Desktop/dir/D.txt";         // Dir dos ficheiros d
-static char * D_NAME = "D.txt";
-static char * PATH = "/Users/axelferreira/Desktop/dir/";                // Dir da pasta
-
+static char * listaTXT  = "/Users/axelferreira/Desktop/dir/lista.txt";      //Endereço do ficheiro lista.txt
+static char * E_PATH    = "/Users/axelferreira/Desktop/dir/E.txt";          // Nome do ficheiro E.txt
+static char * E_NAME    = "E.txt";
+static char * D_PATH    = "/Users/axelferreira/Desktop/dir/D.txt";          // Dir dos ficheiros d
+static char * D_NAME    = "D.txt";
+static char * PATH      = "/Users/axelferreira/Desktop/dir/";               // Dir da pasta
+static int firstTime = TRUE;                                                // Var de controlo da funcao imprimeE
 
 int getnProcessed()
 {   return nProcessed; }
@@ -78,7 +78,9 @@ void process()                               //FUNCAO COMPLETA
 {   int i=0;
     char fileName[MAX_BUFFER_LIST];    //buffer para entradas lista.txt
     char * min_pag = malloc(6 * sizeof(char));
-    FILE * lista = fopen(listaTXT, "r");
+    FILE * lista=NULL;
+    if (PATH_MODE==TRUE) { lista = fopen(listaTXT, "r");}
+    else { lista = fopen("lista.txt", "r"); }
 
     if (lista)
         {   // Ver numero min de pag a considerar.
@@ -113,16 +115,18 @@ void imprimeE(int counter, char * fileN)     //FUNCAO COMPLETA
     char * path = malloc(100*sizeof(char));
     if (PATH_MODE)  {strcpy(path, E_PATH);}
     else    {strcpy(path, E_NAME);}
-    FILE * e = fopen(path, "r");
-    // Inicializa o ficheiro E.txt com as linhas descritivas
-    if (!e)
+    FILE * e;
+    
+    if (firstTime == TRUE)
     {   e = fopen(path, "w");
-        if (e) {    fputs(inicio, e);
-                    fclose(e);
-                }
+        if (e) {    fputs(inicio, e);}
+        firstTime = FALSE;
     }
+    else
+    {   e = fopen(path, "a");
+    }
+    
     // Imprime para o ficheiro o conteúdo
-    e = fopen(path, "a");
         if (e)
         {   strcpy(output, fileN);
             i=(int) strlen(output);
@@ -147,38 +151,38 @@ void imprimeD()                              // FUNCAO COMPLETA
     FILE * d = fopen(path, "w");
     char * estat_b = malloc( 200 * sizeof(char));
     char * linha = malloc( 100 * sizeof(char));
-    char inicio[39] = "Estatistica Basica\n------------------\n";
+    char inicio[39] = "Estatistica basica\n------------------\n";
 
     
     if (d)
     {   strcpy(estat_b, inicio);
 
         p=getnProcessed();
-        sprintf(&linha[0], "  Processed: %d\n", p);
+        sprintf(&linha[0], "%d entradas\n", p);
         for(j=0;linha[j]!='\0'; j++)
         {   estat_b[i] = linha[j];
             i++;
         }
         p=getnRejected();
-        sprintf(&linha[0], "   Rejected: %d\n", p);
+        sprintf(&linha[0], "%d rejeitadas\n", p);
         for(j=0;linha[j]!='\0'; j++)
         {   estat_b[i] = linha[j];
             i++;
         }
         p=getnArticles();
-        sprintf(&linha[0], "   Articles: %d\n", p);
+        sprintf(&linha[0], "%d artigos\n", p);
         for(j=0;linha[j]!='\0'; j++)
         {   estat_b[i] = linha[j];
             i++;
         }
         p=getnJournals();
-        sprintf(&linha[0], "   Journals: %d\n", p);
+        sprintf(&linha[0], "  %d em revista\n", p);
         for(j=0;linha[j]!='\0'; j++)
         {   estat_b[i] = linha[j];
             i++;
         }
         p=getnConferences();
-        sprintf(&linha[0], "Conferences: %d", p);
+        sprintf(&linha[0], "  %d em conferencia\n", p);
         for(j=0;linha[j]!='\0'; j++)
         {   estat_b[i] = linha[j];
             i++;
@@ -196,7 +200,7 @@ void imprimeD()                              // FUNCAO COMPLETA
 
 int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
 {   int ret=TRUE, cont_rej_local=0, i=0,j=0;
-    char *tofree, *token, *string;
+    char *tofree=NULL, *token=NULL, *string=NULL;
     char *fileName = malloc(200*sizeof(char));
     // Cria caminho do ficheiro
     if (PATH_MODE == TRUE)  {   strcpy(fileName,PATH);
@@ -208,7 +212,7 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
     FILE * ficheiro = fopen(fileName, "r");
     if (ficheiro)
     {   char * bLine = malloc(MAX_BUFFER_ENTRY * sizeof(char));
-                if(DEBUG_MODE==TRUE) {printf("\n\n--------------------------------------------------------------------------------\n\t\t\t\t\t%s\n--------------------------------------------------------------------------------\n",fileN);}
+                if(DEBUG_MODE==TRUE) {printf("%s\n",fileN);}
         //le inha a linha do ficheiro
         while (fgets(bLine, MAX_BUFFER_ENTRY, ficheiro))
         { int flag = TRUE;
@@ -244,7 +248,7 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
                     else { flag = validaTitulo(token); }
                 }
             if (tipo == JOURNAL) ///////// J O U R N A L /////////
-            {
+            { char * whatever=tofree;
                 if(flag==TRUE)  // Nome Journal
                 {   if (string[0] == ' ') {string++;}
                     token = strsep(&string, "(");
@@ -289,16 +293,26 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
                 {   // Valida o ano
                     flag = validaAno(string);
                 }
+                if (!flag)  {   if (DEBUG_MODE==TRUE)
+                                {   token  = strsep(&whatever, " ");
+                                    printf("%s\n", token);
+                                }
+                            }
             }
             else ///////// C O N F E R E N C E /////////
-            {   if(flag==TRUE)  // Nome Conferencia e Data
+            { char * whatever=tofree;
+                if(flag==TRUE)  // Nome Conferencia e Data
                 {   if (string[0] == ' ') {string++;}
                     token = strsep(&string, ":");
                     flag = validaNomeConfData(token); }
                 if(flag==TRUE)  // Paginas Conferencia
                 {   flag = validaPaginas(string); }
                 
-                if (!flag) {printf("\nFALHA:%s\n", tofree);}
+                if (!flag)  {   if(DEBUG_MODE==TRUE) {  printf("\nFALHA:%s\n", tofree); }
+                                if(DEBUG_MODE==TRUE) {  token  = strsep(&whatever, " ");
+                                                        printf("%s\n", token);
+                                                     }
+                            }
 
             }
             
@@ -309,7 +323,6 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
                 {incnJournals();}
                 else {incnConferences();}
                 if(DEBUG_MODE==TRUE) {printf("ACEITADA\n\n");}
-                token =strsep(&tofree, " ");
             }
             else {  incnRejected();
                     cont_rej_local++;
