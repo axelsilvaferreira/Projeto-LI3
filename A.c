@@ -7,10 +7,12 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
-#include "A.h"
 #include <limits.h>                 //  so e usado para INT_MAX
 #include <string.h>
 #include <ctype.h>                  // Verificas os caracteres alfanumericos
+#include "A.h"
+#include "F.h"
+
 #define TRUE 1
 #define FALSE 0
 
