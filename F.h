@@ -18,11 +18,11 @@ int initEstrutura();
 
 int addnArt();
 
-int printEstrutura();
+int imprimeG();
 
+int addList();
 
-
-
+int getList();
 
 
 

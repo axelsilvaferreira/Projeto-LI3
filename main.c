@@ -10,9 +10,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "A.h"
-//#include "F.h"
 #include <ctype.h>                  // Verificas os caracteres alfanumericos
+#include "A.h"
+#include "F.h"
+//#include "Estruturas.h"
+
 
 #define TRUE 1
 #define FALSE 0
@@ -21,6 +23,11 @@
 
 int main(int argc, const char * argv[])
 {
+
+    
+
+
+    
 
     process();
     

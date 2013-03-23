@@ -9,11 +9,13 @@
                                                                                                                  //
 #include <stdio.h>                                                                                               //
 #include <stdlib.h>                                                                                              //
-#include "A.h"                                                                                                   //
-#include "F.h"                                                                                                   //
 #include <limits.h>                 //  so e usado para INT_MAX                                                  //
 #include <string.h>                                                                                              //
 #include <ctype.h>                  // Verificas os caracteres alfanumericos                                     //
+#include "A.h"                                                                                                   //
+#include "F.h"
+//#include "Estruturas.h"                                                                                                   //
+
 #define TRUE 1                                                                                                   //
 #define FALSE 0                                                                                                  //
                                                                                                                  //
@@ -89,9 +91,7 @@ void process()                               //FUNCAO COMPLETA
     if (PATH_MODE==TRUE) { lista = fopen(listaTXT, "r");}
     else { lista = fopen("lista.txt", "r"); }
     
-/////////////////////////////////////////////////////////////////////////////////////////
     initEstrutura();
-/////////////////////////////////////////////////////////////////////////////////////////
     
     if (lista)
     {   // Ver numero min de pag a considerar.
@@ -119,7 +119,7 @@ void process()                               //FUNCAO COMPLETA
     free(min_pag);
     
 /////////////////////////////////////////////////////////////////////////////////////////
-    printEstrutura();
+    imprimeG();
 /////////////////////////////////////////////////////////////////////////////////////////
 
 }
@@ -343,16 +343,14 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
             {   incnArticles();
                 addnArt(ano,nAut);
                 if (tipo == JOURNAL)
-                {   incnJournals();
-                }
+                {   incnJournals(); }
                 else
-                {   incnConferences();
-                }
+                {   incnConferences(); }
                 if(DEBUG_MODE==TRUE) {printf("ACEITADA\n\n");}
             }
-            else {  incnRejected();
+            else
+            {   incnRejected();
                 cont_rej_local++;
-                
                 if(DEBUG_MODE==TRUE) {printf("REJEITADA\n\n");}
             }
             
