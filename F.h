@@ -14,11 +14,11 @@
 
 
 
-int criaEstrutura();
+int initEstrutura();
 
-int addEstrutura();
+int addnArt();
 
-int expEstrutura();
+int printEstrutura();
 
 
 

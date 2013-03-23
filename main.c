@@ -9,13 +9,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "A.h"
+//#include "F.h"
+#include <ctype.h>                  // Verificas os caracteres alfanumericos
+
+#define TRUE 1
+#define FALSE 0
+#define DEBUG_MODE FALSE
 
 
 int main(int argc, const char * argv[])
 {
-    process();
 
+    process();
+    
+    
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    if (DEBUG_MODE == TRUE);
+    {printf("now: \n%d\n-%d-%d %d:%d:%d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);}
+    
+    
+    
+    
+    
     return 0;
 }
 
