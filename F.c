@@ -42,7 +42,7 @@ typedef struct sList
 
 typedef struct sAno
 {   int totArtigos;           // Serve para saber quantos artigos existem para este ano, e se existe algum artigo.
-    Nodo list;              // Estrutura que guarda o nº de autores
+    List * list;              // Estrutura que guarda o nº de autores
 }Ano;
 
 typedef struct sAnos
@@ -89,27 +89,37 @@ int imprimeG()
     List * l = NULL;
     FILE * g=NULL, * d3=NULL, * d4=NULL;
     // escolhe o modo Path
-    if (PATH_MODE==TRUE) {  g = fopen(G_PATH, "w");
-                            d3=fopen(DATA3_P, "r");
-                            d4=fopen(DATA4_P, "r");
+    if (PATH_MODE==TRUE) {  g  = fopen(G_PATH, "w");
+                            d3 = fopen(DATA3_P, "r");
+                            d4 = fopen(DATA4_P, "r");
                          }
-    else {  g = fopen(G_NAME, "w");
-            d3=fopen(DATA3, "r");
-            d4=fopen(DATA4, "r");
+    else {  g  = fopen(G_NAME, "w");
+            d3 = fopen(DATA3, "r");
+            d4 = fopen(DATA4, "r");
          }
-    
-    
-    
-
+//////////////////////////////////////////////////////////////////////
+////// IMPRIME ANO[0]   //////////////////////////////////////////////
+                                                                    //
+    l = estrutura.ano[0].list;                                      //
+    if (l)                                                          //
+    {   while (l)                                                   //
+        {   printf("#Autores:%d\n#Artigos:%d\n",l->nAut, l->nArt);  //
+            if (l->seg) {l=l->seg;}                                 //
+        }                                                           //
+    }                                                               //
+//////////////////////////////////////////////////////////////////////
     if (g && d3 && d4)
-    {   
+    {
         // imprime ANO, #AUTORES, #ARTIGOS
             fprintf(g, "\"ano\",\"#autores\",\"#artigos\"\n");
             for (i=1;i<estrutura.maxDimAno;i++)     // i=1 pq o array[0] tem os totais
             {   l = estrutura.ano[i].list;
                 if (l)
                 {   while (l)
-                    {   fprintf(g,"\"%d\",\"%d\",\"%d\"\n",(i+ANO_I-1), (l->nAut), (l->nArt));
+                    {   anoI = l->nAut;
+                        anoF = l->nArt;
+                        printf("\"%d\",\"%d\",\"%d\"\n",(i+ANO_I-1), anoI, anoF);
+                        fprintf(g,"\"%d\",\"%d\",\"%d\"\n",(i+ANO_I-1), (l->nAut), (l->nArt));
                         l=l->seg;
                     }
                 }
@@ -129,7 +139,6 @@ int imprimeG()
             {   token = strsep(&buffer, "-");
                 anoI = atoi(token);
                 anoF = atoi(buffer);
-printf("anoI:%d#\nanoF:%d#\n", anoI, anoF);
                 for (i=anoI;i<=anoF;i++)
                 {   l = estrutura.ano[i].list;
                     if (l)
@@ -167,97 +176,13 @@ printf("anoI:%d#\nanoF:%d#\n", anoI, anoF);
 }
 
 
-
-
-/*
- 
-int printEstrutura()
-{int i,j,k=0,kk=0,f=0;
-   // char * buffer = malloc(100*sizeof(sizeof(int)));
-    FILE * g;
-    if (PATH_MODE==TRUE)
-    { g = fopen(G_PATH, "w");}
-    else { g = fopen(G_NAME, "w");}
-    
-    / *
-    for (i=0;i<estrutura.maxDimNodo;i++)
-    {   k=0;
-        for (j=0;j<estrutura.maxDimAno;j++)
-        { k+= estrutura.ano[j].nodo[i];
-            if (k>0)
-            {fprintf("Ano:%d,#Autores:%d,#artigos:%d\n",(j+ANO_I),(i+1),k);}
-        }
-    }
-    * /
-     
-    if (g)
-    {   /////////////       Imprime "ano","#autores","#artigos"         ///////////////////
-        fprintf(g, "\"ano\",\"#autores\",\"#artigos\"\n");
-        
-        for (j=0;j<(estrutura.maxDimNodo);j++)
-        {   k=0;
-            for (i=0;i<(estrutura.maxDimAno);i++)
-            {   k += estrutura.ano[i].nodo[j];
-                if (k>0) {  fprintf(g,"\"%d\",\"%d\",\"%d\"\n", (i+ANO_I), (j+1), k);
-                            if (DEBUG_MODE==TRUE) {printf("\"%d\",\"%d\",\"%d\"\n",(i+ANO_I), (j+1), k);}
-                         }
-            }
-        }
-    / *
-        for (i=0;i<(estrutura.maxDimNodo);i++)
-        {
-            for (j=0; j<(estrutura.maxDimAno); j++)
-            {   k = estrutura.ano[j].nodo[i]; }
-            if (k>0) {fprintf(g,"\"%d\",\"%d\",\"%d\"\n", (i+ANO_I), (j+1), k);
-                if (DEBUG_MODE==TRUE) {printf("\"%d\",\"%d\",\"%d\"\n",(i+ANO_I), (j+1), k);}}
-        }
-    * /
-        /////////////       Imprime "#autores","#artigos"               ///////////////////
-        fprintf(g, "\"#autores\",\"#artigos\"\n");
-        k=0;
-        for(i=0;i<(estrutura.maxDimAno); i++)
-        { for (j=0;j<(estrutura.maxDimNodo);j++)
-            {   k = estrutura.ano[i].nodo[j];
-                if (k>0) {fprintf(g, "\"%d\",\"%d\"\n",(j+1), k);}
-                if (DEBUG_MODE==TRUE) {printf("\"%d\",\"%d\"\n",(j+1), k);}
-            }
-        }
-        /////////////       Imprime "intervalo","#artigos"              ///////////////////    <-------------  VERIFICAR
-        fprintf(g, "\"intervalo\",\"#artigos\"\n");
-        k=0;
-        for(i=0;i<(estrutura.maxDimAno); i++)
-        { for (j=0;j<(estrutura.maxDimNodo);j++)
-            {   k = estrutura.ano[i].nodo[j];
-                if (k>0) {fprintf(g, "\"%d\",\"%d\"\n",(j+1), k);}
-                if (DEBUG_MODE==TRUE) {printf("\"%d\",\"%d\"\n",(j+1), k);}
-            }
-        }
-        /////////////       Imprime "ano","#autores","percentagem"      ///////////////////
-        fprintf(g, "\"ano\",\"#autores\",\"percentagem\"\n");
-        k=0;
-        for(i=0;i<(estrutura.maxDimAno); i++)
-        { for (j=0;j<(estrutura.maxDimNodo);j++)
-            {   k = estrutura.ano[i].nodo[j];
-                kk = estrutura.ano[i].nArtigos;
-               if (kk>0)
-               {    f = (k / kk);
-                    k = k%kk;
-                    if (k>0) {fprintf(g,"\"%d\",\"%d\",\"%d.%d\"\n", (i+ANO_I), (j+1), f,k);
-                    if (DEBUG_MODE==TRUE) {printf("\"%d\",\"%d\",\"%d.%d\"\n",(i+ANO_I), (j+1), f,k);}}
-               }
-            }
-        }
-        
-    }
-    return 0;
-}
-
-
-*/
-
-
 int addList(List * l, int aut, int art)
 { int ret = TRUE;
+  
+    Nodo n = (Nodo) malloc(sizeof(List));
+    n->nAut = aut;
+    n->nArt = art;
+    n->seg  = NULL;
     
     if (l)
     {   // Avanca ate a posicao de insercao
@@ -268,16 +193,15 @@ int addList(List * l, int aut, int art)
         if(l->nAut == aut)
         { l->nArt+=aut;}
         else // nao existe cria e insere
-        { Nodo n = (Nodo) malloc(sizeof(List));
-            n->nAut = aut;
-            n->nArt = art;
-            n->seg  = NULL;
+        {   n->seg  = NULL;
             if (l->seg)
             {   n->seg = l->seg;
                 l->seg = n;
             }
         }
     }
+    else
+    {   l = n;   }
     
     return ret;
 }
