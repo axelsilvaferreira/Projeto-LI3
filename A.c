@@ -505,3 +505,16 @@ int validaPaginas(char * string)
     return flag;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -14,6 +14,13 @@
 
 
 
+int criaEstrutura();
+
+int addEstrutura();
+
+int expEstrutura();
+
+
 
 
 
