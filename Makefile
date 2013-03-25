@@ -1,11 +1,7 @@
 CC 		= gcc
-CFLAGS	= -Wall -O2 -g
+CFLAGS	= -Wall -Wextra -O2 #-pedantic -g
 OBJS 	= main.o A.o
 
-all:
-	make PARSER_LI3
-	make cleanObj
-	@echo "> make cleanAll - cleans all files created by command \"make\" and both \"E.txt\" \"D.txt.\" created by the program."
 
 PARSER_LI3: $(OBJS)
 	$(CC) $(CFLAGS) -o PARSER_LI3 $(OBJS)
@@ -15,9 +11,15 @@ main.o: main.c A.h A.c
 
 A.o: A.h A.c
 	$(CC) $(CFLAGS) -c A.c
+
+all:
+	make PARSER_LI3
+	#make clean
+	#@echo "> make cleanAll - cleans all files created by command \"make\" and both \"E.txt\" \"D.txt.\" created by the program."
+
 	
 .PHONY: clean
-cleanObj:
+clean:
 	rm *.o
 	@echo "Object Files Removed"
 cleanAll:
