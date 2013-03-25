@@ -26,12 +26,12 @@
 #define PATH_MODE TRUE              //  Modo de caminho especificado TRUE / FALSE       //
 //////////////////////////////////////////////////////////////////////////////////////////
 
-static char * G_PATH    = "/Users/axelferreira/Desktop/dir/G.txt";          // Nome do ficheiro E.txt            //
+static char * G_PATH    = "/Users/axelferreira/Desktop/dir/G.txt";          // Nome do ficheiro G.csv            //
 static char * G_NAME    = "G.csv";                                                                               //
 static char * DATA3_P   = "/Users/axelferreira/Desktop/dir/datas3.txt";
 static char * DATA4_P   = "/Users/axelferreira/Desktop/dir/datas4.txt";
 static char * DATA3     = "datas3.txt";
-static char * DATA4    = "datas4.txt";
+static char * DATA4     = "datas4.txt";
 
 typedef struct sList
 {   int nAut;               // numero de Autores.
@@ -58,7 +58,7 @@ int initEstrutura()
 {int i=0;
     estrutura.maxDimAno=MAXDIM;
     for(i=0;i<(MAXDIM);i++)
-    {   estrutura.ano[i].totArtigos =0;
+    {   estrutura.ano[i].totArtigos = 0;
         estrutura.ano[i].list = NULL;
     }
     
