@@ -24,6 +24,8 @@ int addList();
 
 int getList();
 
+int freeEstrutura();
+
 
 
 

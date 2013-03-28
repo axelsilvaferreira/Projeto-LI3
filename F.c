@@ -183,25 +183,24 @@ int addList(List * l, int aut, int art)
     n->nAut = aut;
     n->nArt = art;
     n->seg  = NULL;
+    if (!n) {return FALSE;}
     
     if (l)
     {   // Avanca ate a posicao de insercao
-        while (l->seg && l->nAut < aut)
+        while (l!=NULL && l->nAut < aut)
         { l = l->seg; }
         
         // verifica se ja existe a posicao e insere
-        if(l->nAut == aut)
-        { l->nArt+=aut;}
-        else // nao existe cria e insere
-        {   n->seg  = NULL;
-            if (l->seg)
-            {   n->seg = l->seg;
-                l->seg = n;
-            }
+        if(!l)
+        { l->nArt+=art;
         }
+        else if (l->nAut==aut)
+            {   l->nArt += art; }
+        else
+        {   l->seg = n; }
     }
-    else
-    {   l = n;   }
+    else    // Se não tem lista cria um nodo e adiciona
+    { l->seg = n; }
     
     return ret;
 }
@@ -220,6 +219,29 @@ int getList(List * l, int aut)
     
     return art;
 }
+
+
+
+
+int freeEstrutura()
+{ int ret = TRUE, i;
+
+    
+    for(i=0;i<estrutura.maxDimAno;i++)
+    {
+        
+    }
+    
+    
+    return ret;
+}
+
+
+
+
+
+
+
 
 
 

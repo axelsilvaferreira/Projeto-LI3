@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <ctype.h>                  // Verificas os caracteres alfanumericos
+#include <ctype.h>                  // Verifica os caracteres alfanumericos
 #include "A.h"
 #include "F.h"
 //#include "Estruturas.h"
