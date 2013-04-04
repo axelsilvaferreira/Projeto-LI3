@@ -61,7 +61,7 @@ int initEstrutura()
     {   estrutura.ano[i].totArtigos = 0;
         estrutura.ano[i].list = NULL;
     }
-    
+        
     return 0;
 }
 

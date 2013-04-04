@@ -14,7 +14,7 @@
 #include <ctype.h>                  // Verificas os caracteres alfanumericos                                     //
 #include "A.h"                                                                                                   //
 #include "F.h"
-//#include "Estruturas.h"                                                                                                   //
+//#include "Estruturas.h"                                                                                        //
 
 #define TRUE 1                                                                                                   //
 #define FALSE 0                                                                                                  //
