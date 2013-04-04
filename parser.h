@@ -1,5 +1,5 @@
 //
-//  A.h
+//  parser.h
 //  LI3
 //
 //  Created by Axel Ferreira on 2/27/13.
@@ -8,7 +8,13 @@
 
 #ifndef LI3_A_h
 #define LI3_A_h
+typedef struct sStats;
 
+
+/**
+ * @return Struct with all counters.
+ */
+struct sStats getStruct();
 
 /**
  * @return nProcessed Returns an integer (int) containing the number of Processed entries.
@@ -80,17 +86,7 @@ void setMinPag();
  */
 void process();
 
-/**
- * This function outputs the number of rejected entries in each file to the "E.txt" file. If the file does not exist, it is created.
- * @param int counter number of invalid entries in the file.
- * @param char * fileN the name of the courent file.
- */
-void imprimeE();
 
-/**
- * This function creates the file "D.txt" and it's content. If the file alreaddy exists, it is rewritten.
- */
-void imprimeD();
 
 
 /**

@@ -1,5 +1,5 @@
 //
-//  Ficheiros.h
+//  fread.h
 //  LI3
 //
 //  Created by Axel Ferreira on 4/3/13.
@@ -8,7 +8,6 @@
 
 #ifndef LI3_Ficheiros_h
 #define LI3_Ficheiros_h
-
 
 
 

@@ -1,5 +1,5 @@
 //
-//  ficheiro.c
+//  fread.c
 //  LI3
 //
 //  Created by Axel Ferreira on 4/3/13.
@@ -7,7 +7,9 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "fread.h"
+
 
 
 
