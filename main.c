@@ -11,9 +11,9 @@
 #include <string.h>
 #include <time.h>
 #include <ctype.h>                  // Verifica os caracteres alfanumericos
-#include "A.h"
-#include "F.h"
-//#include "Estruturas.h"
+#include "fread.h"
+#include "fwrite.h"
+#include "parser.h"
 
 
 #define TRUE 1

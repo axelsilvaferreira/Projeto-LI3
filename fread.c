@@ -7,7 +7,7 @@
 //
 
 #include <stdio.h>
-#include "Ficheiros.h"
+#include "fread.h"
 
 
 

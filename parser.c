@@ -12,10 +12,7 @@
 #include <limits.h>                 //  so e usado para INT_MAX                                                  //
 #include <string.h>                                                                                              //
 #include <ctype.h>                  // Verificas os caracteres alfanumericos                                     //
-#include "A.h"                                                                                                   //
-#include "F.h"
-//#include "Estruturas.h"                                                                                        //
-
+#include "parser.h"                                                                                                   //
 #define TRUE 1                                                                                                   //
 #define FALSE 0                                                                                                  //
                                                                                                                  //
@@ -230,8 +227,9 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
     
     FILE * ficheiro = fopen(fileName, "r");
     if (ficheiro)
-    {   char * bLine = malloc(MAX_BUFFER_ENTRY * sizeof(char));
+    {   char * bLine = realloc(NULL,MAX_BUFFER_ENTRY * sizeof(char));
         if(DEBUG_MODE==TRUE) {printf("%s\n",fileN);}
+        
         //le inha a linha do ficheiro
         while (fgets(bLine, MAX_BUFFER_ENTRY, ficheiro))
         { int flag = TRUE, ano=0,nAut=0;
@@ -543,4 +541,6 @@ int validaPaginas(char * string)
     }
     return flag;
 }
+
+
 

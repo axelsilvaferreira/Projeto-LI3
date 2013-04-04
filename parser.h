@@ -174,6 +174,19 @@ int validaAno();
 int validaPaginas();
 
 
+/**
+ *
+ **/
+int leNumero();
+
+/**
+ *
+ **/
+int leAutores();
+
+/**
+ *
+ **/
 
 
 
