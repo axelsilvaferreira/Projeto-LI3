@@ -14,12 +14,16 @@
 #include "fread.h"
 #include "fwrite.h"
 #include "parser.h"
+
 // Macros
 #define TRUE 1
 #define FALSE 0
 #define DEBUG_MODE FALSE
+#define LINE_BUFFER
+#define FILE_NAME_BUFFER
 #define LISTA "lista.txt"
-
+#define D_TXT "D.txt"
+#define E_TXT "E.txt"
 
 // Contadores do programa main
 static int nPro = 0;
@@ -30,13 +34,24 @@ static int nCon = 0;
 
 int main(int argc, const char * argv[])
 {   int bool = TRUE;
-    char * file_Name = NULL;
+    char file_Name[FILE_NAME_BUFFER];
     char * line = NULL;
     struct sStats * lInfo = NULL;
+    FILE * lista = lista = fopen(LISTA, "r");
+//////////////////
+    char fileName[FILE_NAME_BUFFER];    //buffer para entradas lista.txt
+    char * min_pag = malloc(4 * sizeof(char));
     
-    
+    if (lista)
+    {   // Ver numero min de pag a considerar.
+        fgets(min_pag, sizeof(min_pag), lista);
+        i = atoi(min_pag);
+        setMinPag(i);
+        
+//////////////////
+        
     // Processa os ficheiros todos
-    while ((file_Name = (leLista(LISTA))))
+    while (fgets(fileName, sizeof(fileName), LISTA))
     {   int file_rej=0;
         char t = file_Name[0];
         // Processa as linhas todas do ficheiro
@@ -53,8 +68,8 @@ int main(int argc, const char * argv[])
             }
         }
         // Imprime o Ficheiro E
-        if (bool==TRUE) { bool=FALSE; }
         imprimeE(bool,file_rej, file_Name);
+        if (bool==TRUE) { bool=FALSE; }
     }
     // Imprime o Ficheiro D
     imprimeD(nPro,nRej,nJou,nCon);

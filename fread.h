@@ -9,7 +9,10 @@
 #ifndef LI3_Ficheiros_h
 #define LI3_Ficheiros_h
 
-
+/**
+ * @return Struct with all counters.
+ */
+char * leLinha(file_Name, t);
 
 
 #endif

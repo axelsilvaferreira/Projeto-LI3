@@ -54,11 +54,9 @@ void imprimeE(int bool, int counter, char * path)     //FUNCAO COMPLETA
 
 
 
-void imprimeD()                              // FUNCAO COMPLETA
+void imprimeD(int nPro, int nRej, int nJou, int nCou)                              // FUNCAO COMPLETA
 {   int i=38,j=0,p=0;
     char * path = malloc(100*sizeof(char));
-    if (PATH_MODE==TRUE) {strcpy(path, D_PATH);}
-    else {strcpy(path, D_NAME);}
     
     FILE * d = fopen(path, "w");
     char * estat_b = malloc( 200 * sizeof(char));

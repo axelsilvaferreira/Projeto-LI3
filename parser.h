@@ -9,12 +9,20 @@
 #ifndef LI3_A_h
 #define LI3_A_h
 typedef struct sStats;
-
+typedef struct sCounter;
 
 /**
  * @return Struct with all counters.
  */
-struct sStats getStruct();
+struct sStats parseLine();
+
+/**
+ * @return Struct with all counters.
+ */
+struct sCounter getStruct();
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * @return nProcessed Returns an integer (int) containing the number of Processed entries.

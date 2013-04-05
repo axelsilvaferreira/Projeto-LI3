@@ -1,60 +1,57 @@
-//                                                                                                               //
-//  parser.c                                                                                                          //
-//  LI3                                                                                                          //
-//                                                                                                               //
-//  Created by Axel Ferreira on 3/2/13.                                                                          //
-//  Copyright (c) 2013 Axel Ferreira. All rights reserved.                                                       //
-//                                                                                                               //
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                                                                                                 //
-#include <stdio.h>                                                                                               //
-#include <stdlib.h>                                                                                              //
-#include <limits.h>                 //  so e usado para INT_MAX                                                  //
-#include <string.h>                                                                                              //
-#include <ctype.h>                  // Verificas os caracteres alfanumericos                                     //
-#include "parser.h"                                                                                                   //
-#define TRUE 1                                                                                                   //
-#define FALSE 0                                                                                                  //
-                                                                                                                 //
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                                                                                                 //
-#define DEBUG_MODE FALSE            //  Modo debug TRUE / FALSE                                                  //
-#define PATH_MODE TRUE              //  Modo de caminho especificado TRUE / FALSE                                //
-                                                                                                                 //
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                                                                                                 //
-#define MAX_BUFFER_LIST 80          //  Buffer usado para ler entradas do ficheiro lista.txt                     //
-#define MAX_BUFFER_ENTRY 800        //  Buffer usado para ler entradas dos ficheiros c/j-*.txt                   //
-#define CONFERENCE 8                                                                                             //
-#define JOURNAL 6                                                                                                //
-#define DIMARRAY 6                  //  Dimensao do Array das palavras proibidas                                 //
-static int nProcessed = 0;          //  numero de entradas processadas                                           //
-static int nRejected = 0;           //  numero total de entradas rejeitadas                                      //
-static int nArticles = 0;           //  numero total de Artigos                                                  //
-static int nJournals = 0;           //  numero de Artigos em Revista                                             //
-static int nConference = 0;         //  numero de Artigos em Conferencia                                         //
-static int minPag = 0;              //  numero de Pag minimo para artigos                                        //
-static char * listaTXT  = "/Users/axelferreira/Desktop/dir/lista.txt";      //Endereço do ficheiro lista.txt     //
-static char * E_PATH    = "/Users/axelferreira/Desktop/dir/E.txt";          // Nome do ficheiro E.txt            //
-static char * E_NAME    = "E.txt";                                                                               //
-static char * D_PATH    = "/Users/axelferreira/Desktop/dir/D.txt";          // Dir dos ficheiros d               //
-static char * D_NAME    = "D.txt";                                                                               //
-static char * PATH      = "/Users/axelferreira/Desktop/dir/";               // Dir da pasta                      //
-static int firstTime    = TRUE;                                             // Var de controlo da funcao impimeE //
-                                                                                                                 //
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  parser.c
+//  LI3
+//
+//  Created by Axel Ferreira on 3/2/13.
+//  Copyright (c) 2013 Axel Ferreira. All rights reserved.
+//
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>                  // Verificas os caracteres alfanumericos
+#include "parser.h"
+
+#define TRUE 1
+#define FALSE 0
+#define DEBUG_MODE FALSE            //  Modo debug TRUE / FALSE
+#define MAX_BUFFER_LIST 80          //  Buffer usado para ler entradas do ficheiro lista.txt
+#define MAX_BUFFER_ENTRY 800        //  Buffer usado para ler entradas dos ficheiros c/j-*.txt
+#define CONFERENCE 8
+#define JOURNAL 6
+#define DIMARRAY 6                  //  Dimensao do Array das palavras proibidas
+static int nProcessed = 0;          //  numero de entradas processadas
+static int nRejected = 0;           //  numero total de entradas rejeitadas
+static int nArticles = 0;           //  numero total de Artigos
+static int nJournals = 0;           //  numero de Artigos em Revista
+static int nConference = 0;         //  numero de Artigos em Conferencia
+static int minPag = 0;              //  numero de Pag minimo para artigos
+static int firstTime    = TRUE;     // Var de controlo da funcao impimeE
+
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef struct sStats
-{   int nPro;
-    int nRej;
-    int nArt;
-    int nJou;
-    int nCon;
+{   char * nome;        // buffer com os autores
+    int n;              // Numero de autores
+    int ano;            // Ano
 }Stats;
 
+typedef struct sCounter
+{   int nPro;           // Contador Processados
+    int nRej;           // Contador Rejeitados
+    int nArt;           // Contador Artigos             <-------------------<<<<
+    int nJou;           // Contador Revistas
+    int nCon;           // Contador Conferencias
+} Counter;
 
-Stats getStruct()
-{  Stats s;
+Stats parseLine()
+{   Stats s;
+    
+    return s;
+}
+
+Counter getStruct()
+{  Counter s;
     s.nPro=getnProcessed();
     s.nRej=getnRejected();
     s.nArt=getnArticles();
@@ -63,6 +60,8 @@ Stats getStruct()
     return s;
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 int getnProcessed()
 {   return nProcessed; }
 
