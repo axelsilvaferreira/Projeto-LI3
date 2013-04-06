@@ -49,7 +49,7 @@ int leFicheiro(char * bufferList)
     
     // Caso tenha conseguido abrir o ficheiro e alocar o buffer
     if (indexC_J!=-1 && bufferLine)
-    {
+    {   char type = bufferList[0];
         // Le cada linha do ficheiro
         while (!feof(f2))
         {   ret=dynamic_read_line(&bufferLine, &bLine_size, indexC_J);
@@ -57,9 +57,9 @@ int leFicheiro(char * bufferList)
             struct sStats * entrada=NULL;
             
             // Valida a linha
-            entrada = parseLine(bufferLine);
+            entrada = parseLine(bufferLine, type);
             if (entrada)
-            {   if (bufferList[0]=='c')     // Caso seja Conf
+            {   if (type=='c')     // Caso seja Conf
             {   nCon++;
                 // Adiciona dados a estrutura dos contadores
                 // Adiciona dados a estrutura dos Autores

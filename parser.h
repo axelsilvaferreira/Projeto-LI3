@@ -13,13 +13,25 @@
 /**
  * @return Struct with all counters.
  */
-struct sStats * parseLine();
+struct sStats parseLine(char * buffer, char t);
 
 
 /**
  * @param pag Sets the minimum number of pages requiered for an article to be accepted.
  */
 void setMinPag();
+
+
+/**
+ *
+ */
+int getNumero();
+
+/**
+ *
+ */
+char * getAutores();
+
 
 
 /**
