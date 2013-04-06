@@ -9,10 +9,31 @@
 #ifndef LI3_Ficheiros_h
 #define LI3_Ficheiros_h
 
+#define MAX_FILE 10
+
 /**
- * @return Struct with all counters.
+ * Initializes the control for the files
  */
-char * leLinha(file_Name, t);
+void init_file_control();
+
+/**
+ * Opens a file.
+ * @return file index in control.
+ */
+int openFile(char * file_name, char * mode);
+
+/**
+ * Closes a file.
+ * @param file_name the name of the file to be closed.
+ */
+void closeFile(char * file_name);
+
+/**
+ * Reads a line from a file growing the buffer as needed.
+ * @return 0 if success -1 otherwise.
+ */
+int dynamic_read_line(char** buf, int* size);
+
 
 
 #endif
