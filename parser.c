@@ -20,13 +20,8 @@
 #define CONFERENCE 8
 #define JOURNAL 6
 #define DIMARRAY 6                  //  Dimensao do Array das palavras proibidas
-static int nProcessed = 0;          //  numero de entradas processadas
-static int nRejected = 0;           //  numero total de entradas rejeitadas
-static int nArticles = 0;           //  numero total de Artigos
-static int nJournals = 0;           //  numero de Artigos em Revista
-static int nConference = 0;         //  numero de Artigos em Conferencia
+
 static int minPag = 0;              //  numero de Pag minimo para artigos
-static int firstTime    = TRUE;     // Var de controlo da funcao impimeE
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -36,67 +31,20 @@ typedef struct sStats
     int ano;            // Ano
 }Stats;
 
-typedef struct sCounter
-{   int nPro;           // Contador Processados
-    int nRej;           // Contador Rejeitados
-    int nArt;           // Contador Artigos             <-------------------<<<<
-    int nJou;           // Contador Revistas
-    int nCon;           // Contador Conferencias
-} Counter;
+//////////////////////////////////////////////////////////////////////////////////////////////
 
-Stats parseLine()
-{   Stats s;
+Stats * parseLine()
+{   Stats *s=NULL;
+    
+    
     
     return s;
 }
 
-Counter getStruct()
-{  Counter s;
-    s.nPro=getnProcessed();
-    s.nRej=getnRejected();
-    s.nArt=getnArticles();
-    s.nJou=getnJournals();
-    s.nCon=getnConferences();
-    return s;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-int getnProcessed()
-{   return nProcessed; }
-
-int getnRejected()
-{   return nRejected; }
-
-int getnArticles()
-{   return nArticles; }
-
-int getnJournals()
-{   return nJournals; }
-
-int getnConferences()
-{   return nConference; }
-
-int getMinPag()
-{   return minPag; }
-
-void incnProcessed()
-{   nProcessed ++; }
-
-void incnRejected()
-{   nRejected ++; }
-
-void incnArticles()
-{   nArticles ++; }
-
-void incnJournals()
-{   nJournals ++; }
-
-void incnConferences()
-{   nConference ++; }
 
 void setMinPag(int pag)
 {   minPag = pag;}
+
 
 void process()                               //FUNCAO COMPLETA
 {   int i=0;

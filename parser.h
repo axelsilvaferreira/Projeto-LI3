@@ -8,79 +8,13 @@
 
 #ifndef LI3_A_h
 #define LI3_A_h
-typedef struct sStats;
-typedef struct sCounter;
+//typedef struct sStats;
 
 /**
  * @return Struct with all counters.
  */
-struct sStats parseLine();
+struct sStats * parseLine();
 
-/**
- * @return Struct with all counters.
- */
-struct sCounter getStruct();
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * @return nProcessed Returns an integer (int) containing the number of Processed entries.
- */
-int getnProcessed();
-
-/**
- * @return nRejected Returns an integer (int) containing the number of rejected entries.
- */
-int getnRejected();
-
-/**
- * @return nArticles Returns an integer (int) containing the total number of Articles.
- */
-int getnArticles();
-
-/**
- * @return nJournals Returns an integer (int) containing the number of articles in Journals.
- */
-int getnJournals();
-
-/**
- * @return nConferences Returns an integer (int) containing the number of articles in conferences.
- */
-int getnConferences();
-
-/**
- * @return minPag Returns an integer (int) containing the minimum number of pages an article is requiered to have.
- */
-int getMinPag();
-
-
-
-
-/**
- * Increments the processed entries counter.
- */
-void incnProcessed();
-
-/**
- * Increments the Rejected entries counter.
- */
-void incnRejected();
-
-/**
- * Increments the Articles counter.
- */
-void incnArticles();
-
-/**
- * Increments the Journals counter.
- */
-void incnJournals();
-
-/**
- * Increments the Conferences counter.
- */
-void incnConferences();
 
 /**
  * @param pag Sets the minimum number of pages requiered for an article to be accepted.

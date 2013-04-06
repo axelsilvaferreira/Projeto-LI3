@@ -13,8 +13,6 @@
 
 #define TRUE 1
 #define FALSE 0
-#define E_FILE "E.txt"
-#define D_FILE "D.txt"
 
 
 void imprimeE(int bool, int counter, char * path)     //FUNCAO COMPLETA
@@ -54,45 +52,46 @@ void imprimeE(int bool, int counter, char * path)     //FUNCAO COMPLETA
 
 
 
-void imprimeD(int nPro, int nRej, int nJou, int nCou)                              // FUNCAO COMPLETA
-{   int i=38,j=0,p=0;
+void imprimeD(int nRej, int nJou, int nCou)                              // FUNCAO COMPLETA
+{  // int i=38,j=0;
     char * path = malloc(100*sizeof(char));
-    
     FILE * d = fopen(path, "w");
-    char * estat_b = malloc( 200 * sizeof(char));
+/*    char * estat_b = malloc( 200 * sizeof(char));
     char * linha = malloc( 100 * sizeof(char));
     char inicio[39] = "Estatistica basica\n------------------\n";
-    
+*/
     
     if (d)
-    {   strcpy(estat_b, inicio);
+    {   //strcpy(estat_b, inicio);
         
-        p=getnProcessed();
-        sprintf(&linha[0], "%d entradas\n", p);
+        fprintf(d, "Estatistica basica\n------------------\n");
+        fprintf(d, "%d entradas\n", (nRej+nJou+nCou));
+        fprintf(d, "%d rejeitadas\n", (nRej+nJou+nCou));
+        fprintf(d, "%d artigos\n", (nRej+nJou+nCou));
+        fprintf(d, "%d revista\n", (nRej+nJou+nCou));
+        fprintf(d, "%d conferencia\n", (nRej+nJou+nCou));
+        
+/*        sprintf(&linha[0], "%d entradas\n", (nRej+nJou+nCou));
         for(j=0;linha[j]!='\0'; j++)
         {   estat_b[i] = linha[j];
             i++;
         }
-        p=getnRejected();
-        sprintf(&linha[0], "%d rejeitadas\n", p);
+        sprintf(&linha[0], "%d rejeitadas\n", nRej);
         for(j=0;linha[j]!='\0'; j++)
         {   estat_b[i] = linha[j];
             i++;
         }
-        p=getnArticles();
-        sprintf(&linha[0], "%d artigos\n", p);
+        sprintf(&linha[0], "%d artigos\n", (nJou+nCou));
         for(j=0;linha[j]!='\0'; j++)
         {   estat_b[i] = linha[j];
             i++;
         }
-        p=getnJournals();
-        sprintf(&linha[0], "  %d em revista\n", p);
+        sprintf(&linha[0], "  %d em revista\n", nJou);
         for(j=0;linha[j]!='\0'; j++)
         {   estat_b[i] = linha[j];
             i++;
         }
-        p=getnConferences();
-        sprintf(&linha[0], "  %d em conferencia\n", p);
+        sprintf(&linha[0], "  %d em conferencia\n", nCou);
         for(j=0;linha[j]!='\0'; j++)
         {   estat_b[i] = linha[j];
             i++;
@@ -100,11 +99,12 @@ void imprimeD(int nPro, int nRej, int nJou, int nCou)                           
         
         
         fputs(estat_b, d);
+ */
         fclose(d);
     }
     free(path);
-    free(estat_b);
-    free(linha);
+    // free(estat_b);
+    // free(linha);
 }
 
 

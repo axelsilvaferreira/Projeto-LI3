@@ -16,12 +16,12 @@
  * @param int counter number of invalid entries in the file.
  * @param char * fileN the name of the courent file.
  */
-void imprimeE();
+void imprimeE(int bool, int counter, char * path);
 
 /**
  * This function creates the file "D.txt" and it's content. If the file alreaddy exists, it is rewritten.
  */
-void imprimeD();
+void imprimeD(int nRej, int nJou, int nCou);
 
 
 
