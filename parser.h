@@ -23,18 +23,6 @@ void setMinPag();
 
 
 /**
- *
- */
-int getNumero();
-
-/**
- *
- */
-char * getAutores();
-
-
-
-/**
  * Opens the "lista.txt" file and saves the minimum page number for an article to be accepted.
  * Also for every file listed it opens the file and cals the function @func validEntry() with every entry in each file.
  */

@@ -27,24 +27,19 @@ static int minPag = 0;              //  numero de Pag minimo para artigos
 
 typedef struct sStats
 {   char * nomes;                   // buffer com os autores
-    int n;                          // Numero de autores
     int ano;                        // Ano
 }Stats;
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 Stats parseLine(char * buffer, char t)
-{   int flag = TRUE, ano=0, i;
-    static char *forbiddenW[DIMARRAY] = {"ISBN","PREFACE","EDITORIAL","ERRATA","OBITUARY","IN MEMORY OF"};
-    char * autores=NULL, * string, * token;
+{   int flag = TRUE, ano=0;
+    char * autores=NULL, * string=NULL, * token=NULL;
     Stats s;
     s.nomes=NULL;
+    s.ano=FALSE;
     
-    
-    
-    
-    
-/////////   P  A  R  S  E  R   ////////////
+    /////////   P  A  R  S  E  R   ////////////
 
     // Valida numero inicial
     token = strsep(&buffer, " ");
@@ -53,8 +48,8 @@ Stats parseLine(char * buffer, char t)
     
     // Valida Autores
     autores = strsep(&buffer, ":");
-    s.n = validaAutores(&autores);
-    if (!s.n || !buffer) {return s;}
+    flag = validaAutores(&autores);
+    if (!flag || !buffer) {return s;}
     
     // Valida Titulo
     token = strsep(&buffer, ".");
@@ -84,9 +79,14 @@ Stats parseLine(char * buffer, char t)
         if (!flag || !buffer) {return s;}
         
         // Valida Paginas da Revista
-        token = strsep(&buffer, " (\n\0");
+        token = strsep(&buffer, "(");
         flag = validaPaginas(token);
         if (!flag || !buffer) {return s;}
+        
+        // Valida Ano da Revista
+        token = strsep(&buffer, ")");
+        s.ano = validaAno(token);
+        if (!s.ano) {return s;}
         
     }
     else if (t == 'c')      /////////// ( C O N F E R E N C E ) ///////////
@@ -101,43 +101,11 @@ Stats parseLine(char * buffer, char t)
         else {  // Copia os autores para a estrutura a devolver
                 s.nomes = strdup(autores);
              }
-    
-////////////////////////////////////////////////////////////////////////////////////////
-//   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-    if (tipo == JOURNAL) ///////// J O U R N A L /////////
-        
-        if(flag==TRUE)  // Paginas Revista
-        { int x=getMinPag();
-            // valida o numero de paginas
-            if (string[0] == ':') {string++;}
-            token = strsep(&string, "-");
-            if (!token || !string) {flag = FALSE;}
-            else
-            {   // testa se e numero###############################
-                i=0;
-                j=0;
-                i=atoi(token);
-                token = strsep(&string, " ");
-                if (!token || !string) {flag = FALSE;}
-                else {  // testa se e numero ########################
-                        j=atoi(token);
-                        if (((j-i)+1) < minPag)
-                        {flag=FALSE;}
-                     }
-            }
-        }
-        if(flag==TRUE)  // Ano Revista
-        {   // Valida o ano
-            ano = validaAno(string);
-            if (ano == FALSE) {flag = FALSE;}
-            else {flag = TRUE;}
-        }
-        
-    }
-    else ///////// C O N F E R E N C E /////////
-    { char * whatever=tofree;
-        if(flag==TRUE)  // Nome Conferencia e Data
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+    ///////// C O N F E R E N C E /////////
+ 
+    if(flag==TRUE)  // Nome Conferencia e Data
         {   if (string[0] == ' ') {string++;}
             token = strsep(&string, ":");
             ano = validaNomeConfData(token);
@@ -147,16 +115,9 @@ Stats parseLine(char * buffer, char t)
         }
         if(flag==TRUE)  // Paginas Conferencia
         {   flag = validaPaginas(string); }
-        
-        if (!flag)  {   if(DEBUG_MODE==TRUE) {  printf("\nFALHA:%s\n", tofree); }
-            if(DEBUG_MODE==TRUE) {  token  = strsep(&whatever, " ");
-                printf("%s\n", token);
-            }
-        }
-    }
     
     if (flag==FALSE)
-    {s = NULL;}
+    {s.nomes = NULL;}
     
     return s;
 }
@@ -170,15 +131,6 @@ Stats parseLine(char * buffer, char t)
 
 void setMinPag(int pag)
 {   minPag = pag;}
-
-
-int getNumero()
-{}
-
-char * getAutores()
-{}
-
-
 
 
 void process()                               //FUNCAO COMPLETA
@@ -399,7 +351,7 @@ int validaNumeroR(char * token)
     
     if (!token) {return FALSE;}
     // Trim dos espaços e simbolos iniciais
-    while (token[i]==' ') {i++; token ++;}
+    while (token[i]==' ' && string) {i++; token ++;}
     
     // testa se e numero ##########################
     for (i=0;token[i]!='\0';i++)
@@ -416,7 +368,7 @@ int validaVolume(char * token)
         
     if (!token) {return FALSE;}
     // Trim dos espaços e simbolos iniciais
-    while (token[i]==' ') {i++; token ++;}
+    while (token[i]==' ' && string) {i++; token ++;}
     
     for (i=0;token[i]!='\0';i++)
     {   if (!(isdigit(token[i])))
@@ -431,7 +383,7 @@ int validaNumeroI(char * token)
     
     if (!token) {return FALSE;}
     // Trim dos espaços e simbolos iniciais
-    while (token[i]==' ') {i++; token ++;}
+    while (token[i]==' ' && string) {i++; token ++;}
     
     for(i=0;token[i]!='\0';i++)
     {   if (!(isdigit(token[i])))
@@ -446,6 +398,10 @@ int validaTitulo(char * token)
     static char *forbiddenW[DIMARRAY] = {"ISBN","PREFACE","EDITORIAL","ERRATA","OBITUARY","IN MEMORY OF"};
     char * tofree=NULL, * string=NULL;
 
+    if (!token) {return FALSE;}
+    // Trim dos espaços e simbolos iniciais
+    while (token[i]==' ' && string) {i++; token ++;}
+    
     // PROCURA PALAVRAS PROIBIDAS
     tofree = string = strdup(token);
     //converte tudo para maiusculas
@@ -454,11 +410,6 @@ int validaTitulo(char * token)
     //procura palavras proibidas
     for (i=0;(flag==TRUE) && (i<(DIMARRAY-1));i++)
     {   if (strstr(buffer, forbiddenW[i])) { return s; } }
-    
-    
-    if (!token) {return FALSE;}
-    // Trim dos espaços e simbolos iniciais
-    while (token[i]==' ') {i++; token ++;}
     
     // verifica se tem titulo (pelo menos um char)
     for (i=0;(token[i]!='\0') && flag2==FALSE;i++)
@@ -475,7 +426,7 @@ int validaAutores(char * token)
     
     if (!token) {return FALSE;}
     // Trim dos espaços e simbolos iniciais
-    while (token[i]==' ') {i++; token ++;}
+    while (token[i]==' ' && string) {i++; token ++;}
     
     //Verifica se há autores
     for (i=0;(token[i]!='\0' && !flag2) && flag2==FALSE;i++)
@@ -491,7 +442,7 @@ int validaSiglaJour(char * token)
     
     if (!token) {return FALSE;}
     // Trim dos espaços e simbolos iniciais
-    while (token[i]==' ') {i++; token ++;}
+    while (token[i]==' ' && string) {i++; token ++;}
     
     for (i=0;token[i]!='\0';i++)
     {   if (!isalpha(token[i]) || !isupper(token[i]))
@@ -506,7 +457,7 @@ int validaNomeJour(char * token)
     
     if (!token) {return FALSE;}
     // Trim dos espaços iniciais
-    while (token[i]==' ') {i++; token ++;}
+    while (token[i]==' ' && string) {i++; token ++;}
         
         for (i=0;token[i]!='\0';i++)
         { if (isalnum(token[i])!=0) {flag2 = TRUE;} }
@@ -522,7 +473,7 @@ int validaNomeConfData(char * token)
     
     if (token==NULL) {return FALSE;}
     // Trim dos espaços iniciais
-    while (token[i]==' ') {i++; token ++;}
+    while (token[i]==' ' && string) {i++; token ++;}
     
     i = (int) strlen(token);
     j = (i-4);
@@ -540,17 +491,12 @@ int validaNomeConfData(char * token)
 
 int validaAno(char * string)
 { int flag=TRUE, ano=FALSE;
-    char * token = NULL;
     
     if (!string) {return FALSE;}
     // Trim dos espaços e simbolos iniciais
-    while (token[i]==' ') {i++; string ++;}
+    while (!isdigit(string[i]) && string) {i++; string ++;}
     
-    if (string[0] == '(') {string++;}
-    token = strsep(&string, ")");
-
-    if (flag==TRUE)
-    {   ano=atoi(token); }
+    if (flag) { ano = atoi(token); }
     
     return ano;
 }
@@ -562,7 +508,7 @@ int validaPaginas(char * string)
     
     if (!string) {return FALSE;}
     // Trim dos espaços iniciais
-    while (!isdigit(string[i])) {i++; string++;}
+    while (!isdigit(string[i]) && string) {i++; string++;}
     if (!string) {return FALSE;}
     
     token = strsep(&string, "-");
