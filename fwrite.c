@@ -15,10 +15,10 @@
 #define FALSE 0
 
 
-void imprimeE(int bool, int counter, char * path)     //FUNCAO COMPLETA
-{   int i=0;
+void imprimeE(int bool, int counter, char * file, char * path)     //FUNCAO COMPLETA
+{   //int i=0;
     char inicio[35] = "Lista Rejeitadas\n----------------\n";
-    char * output = malloc(100* sizeof(char));
+    //char * output = malloc(100* sizeof(char));
     FILE * e;
     
     // Verifica se é a primeira escrita para o ficheiro
@@ -27,40 +27,38 @@ void imprimeE(int bool, int counter, char * path)     //FUNCAO COMPLETA
         if (e) {    fputs(inicio, e);}
     }
     else
-    {   e = fopen(path, "a");
-    }
+    {   e = fopen(path, "a"); }
     
     // Imprime para o ficheiro o conteúdo
     if (e)
-    {   strcpy(output, path);
-        i=(int) strlen(output);
+    {   //strcpy(output, path);
+        //i=(int) strlen(output);
         //dar espaco
-        output[i]=' ';
-        i++;
+        //output[i]=' ';
+        //i++;
         //Converter inteiro para o buffer
-        sprintf(&output[i], "%d\n", counter);
-        fputs(output, e);
+        fprintf(e, "%s %d\n",file, counter);
+//        sprintf(&output[i], "%d\n", counter);
+//        fputs(output, e);
         fclose(e);
     }
-    free(output);
+  //  free(output);
 }
 
 
-void imprimeD(int nRej, int nJou, int nCou)           // FUNCAO COMPLETA
-{   char * path = malloc(100*sizeof(char));
-    FILE * d = fopen(path, "w");
+void imprimeD(int nRej, int nJou, int nCou, char * path)           // FUNCAO COMPLETA
+{   FILE * d = fopen(path, "w");
     
     if (d)
     {   fprintf(d, "Estatistica basica\n------------------\n");
         fprintf(d, "%d entradas\n", (nRej+nJou+nCou));
         fprintf(d, "%d rejeitadas\n", (nRej+nJou+nCou));
         fprintf(d, "%d artigos\n", (nRej+nJou+nCou));
-        fprintf(d, "%d revista\n", (nRej+nJou+nCou));
-        fprintf(d, "%d conferencia\n", (nRej+nJou+nCou));
+        fprintf(d, "  %d revista\n", (nRej+nJou+nCou));
+        fprintf(d, "  %d conferencia\n", (nRej+nJou+nCou));
         
         fclose(d);
     }
-    free(path);    
 }
 
 
