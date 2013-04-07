@@ -8,9 +8,11 @@
 
 #ifndef LI3_A_h
 #define LI3_A_h
-//typedef struct sStats;
 
 /**
+ * Patses a Line 
+ * @param buffer the buffer containing the line to be parsed
+ * @param ty+he type of the line conference or jounal)
  * @return Struct with all counters.
  */
 struct sStats parseLine(char * buffer, char t);
@@ -20,26 +22,6 @@ struct sStats parseLine(char * buffer, char t);
  * @param pag Sets the minimum number of pages requiered for an article to be accepted.
  */
 void setMinPag();
-
-
-/**
- * Opens the "lista.txt" file and saves the minimum page number for an article to be accepted.
- * Also for every file listed it opens the file and cals the function @func validEntry() with every entry in each file.
- */
-void process();
-
-
-
-
-/**
- * This function validates each entry for a B file.
- * The function calls a function for each token, validating every entry.
- * It also increments the counters: Conference and/or Journal and/or Article and/or Rejected.
- * @param char * fileN the name of the file to be validated.
- * @param int tipo tels if it's a Conference or Journal.
- */
-int validFile();
-
 
 /**
  * This function validates the Journal number. By checking if any of the characters are not digits, if so the function returns the flag as FALSE.
@@ -110,22 +92,6 @@ int validaAno();
  * @return flag the flag (TRUE if valid field, FALSE otherwise)
  */
 int validaPaginas();
-
-
-/**
- *
- **/
-int leNumero();
-
-/**
- *
- **/
-int leAutores();
-
-/**
- *
- **/
-
 
 
 
