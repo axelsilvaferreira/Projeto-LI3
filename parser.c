@@ -23,14 +23,6 @@
 
 static int minPag = 0;              //  numero de Pag minimo para artigos
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-typedef struct sStats
-{   char * nomes;                   // buffer com os autores
-    int ano;                        // Ano
-}Stats;
-
-//////////////////////////////////////////////////////////////////////////////////////////////
 
 Stats parseLine(char * buffer, char t)
 {   int flag = TRUE, ano=0;

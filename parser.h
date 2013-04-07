@@ -8,6 +8,14 @@
 
 #ifndef LI3_A_h
 #define LI3_A_h
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+typedef struct sStats
+{   char * nomes;                   // buffer com os autores
+    int ano;                        // Ano
+}Stats;
+
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Patses a Line 
@@ -15,7 +23,7 @@
  * @param ty+he type of the line conference or jounal)
  * @return Struct with all counters.
  */
-struct sStats parseLine(char * buffer, char t);
+Stats parseLine(char * buffer, char t);
 
 
 /**

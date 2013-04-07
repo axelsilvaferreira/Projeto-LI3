@@ -54,24 +54,23 @@ int leFicheiro(char * bufferList)
         while (!feof(f2))
         {   ret=dynamic_read_line(&bufferLine, &bLine_size, indexC_J);
             if (ret==-1) {return ret;}
-            struct sStats * entrada=NULL;
+            Stats entrada;
             
             // Valida a linha
             entrada = parseLine(bufferLine, type);
-            if (entrada)
-            {   if (type=='c')     // Caso seja Conf
-            {   nCon++;
-                // Adiciona dados a estrutura dos contadores
-                // Adiciona dados a estrutura dos Autores
+            if (entrada.nomes)      
+            {   if (type=='c')      // Caso seja Conf
+                {   nCon++;
+                    // Adiciona dados a estrutura dos contadores
+                    // Adiciona dados a estrutura dos Autores
+                }
+                else                // Caso seja Revista
+                {   nJou++;
+                    // Adiciona dados a estrutura dos contadores
+                    // Adiciona dados a estrutura dos Autores
+                }
             }
-            else                        // Caso seja Revista
-            {   nJou++;
-                // Adiciona dados a estrutura dos contadores
-                // Adiciona dados a estrutura dos Autores
-            }
-                
-            }
-            else                            // Caso não seja válida
+            else                    // Caso não seja válida
             { lRej++;}
         }
         free(bufferLine);
