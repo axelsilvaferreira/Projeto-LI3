@@ -21,10 +21,10 @@ void imprimeE(int bool, int counter, char * path)     //FUNCAO COMPLETA
     char * output = malloc(100* sizeof(char));
     FILE * e;
     
+    // Verifica se é a primeira escrita para o ficheiro
     if (bool == TRUE)
     {   e = fopen(path, "w");
         if (e) {    fputs(inicio, e);}
-        firstTime = FALSE;
     }
     else
     {   e = fopen(path, "a");
@@ -32,7 +32,7 @@ void imprimeE(int bool, int counter, char * path)     //FUNCAO COMPLETA
     
     // Imprime para o ficheiro o conteúdo
     if (e)
-    {   strcpy(output, fileN);
+    {   strcpy(output, path);
         i=(int) strlen(output);
         //dar espaco
         output[i]=' ';
@@ -43,69 +43,66 @@ void imprimeE(int bool, int counter, char * path)     //FUNCAO COMPLETA
         fclose(e);
     }
     free(output);
-    free(path);
 }
 
 
-
-
-
-
-
-void imprimeD(int nRej, int nJou, int nCou)                              // FUNCAO COMPLETA
-{  // int i=38,j=0;
-    char * path = malloc(100*sizeof(char));
+void imprimeD(int nRej, int nJou, int nCou)           // FUNCAO COMPLETA
+{   char * path = malloc(100*sizeof(char));
     FILE * d = fopen(path, "w");
-/*    char * estat_b = malloc( 200 * sizeof(char));
-    char * linha = malloc( 100 * sizeof(char));
-    char inicio[39] = "Estatistica basica\n------------------\n";
-*/
     
     if (d)
-    {   //strcpy(estat_b, inicio);
-        
-        fprintf(d, "Estatistica basica\n------------------\n");
+    {   fprintf(d, "Estatistica basica\n------------------\n");
         fprintf(d, "%d entradas\n", (nRej+nJou+nCou));
         fprintf(d, "%d rejeitadas\n", (nRej+nJou+nCou));
         fprintf(d, "%d artigos\n", (nRej+nJou+nCou));
         fprintf(d, "%d revista\n", (nRej+nJou+nCou));
         fprintf(d, "%d conferencia\n", (nRej+nJou+nCou));
         
-/*        sprintf(&linha[0], "%d entradas\n", (nRej+nJou+nCou));
-        for(j=0;linha[j]!='\0'; j++)
-        {   estat_b[i] = linha[j];
-            i++;
-        }
-        sprintf(&linha[0], "%d rejeitadas\n", nRej);
-        for(j=0;linha[j]!='\0'; j++)
-        {   estat_b[i] = linha[j];
-            i++;
-        }
-        sprintf(&linha[0], "%d artigos\n", (nJou+nCou));
-        for(j=0;linha[j]!='\0'; j++)
-        {   estat_b[i] = linha[j];
-            i++;
-        }
-        sprintf(&linha[0], "  %d em revista\n", nJou);
-        for(j=0;linha[j]!='\0'; j++)
-        {   estat_b[i] = linha[j];
-            i++;
-        }
-        sprintf(&linha[0], "  %d em conferencia\n", nCou);
-        for(j=0;linha[j]!='\0'; j++)
-        {   estat_b[i] = linha[j];
-            i++;
-        }
-        
-        
-        fputs(estat_b, d);
- */
         fclose(d);
     }
-    free(path);
-    // free(estat_b);
-    // free(linha);
+    free(path);    
 }
 
 
 
+/*  
+ // int i=38,j=0;
+ char * estat_b = malloc( 200 * sizeof(char));
+ char * linha = malloc( 100 * sizeof(char));
+ char inicio[39] = "Estatistica basica\n------------------\n";
+ 
+
+
+ //strcpy(estat_b, inicio);
+ 
+ sprintf(&linha[0], "%d entradas\n", (nRej+nJou+nCou));
+ for(j=0;linha[j]!='\0'; j++)
+ {   estat_b[i] = linha[j];
+ i++;
+ }
+ sprintf(&linha[0], "%d rejeitadas\n", nRej);
+ for(j=0;linha[j]!='\0'; j++)
+ {   estat_b[i] = linha[j];
+ i++;
+ }
+ sprintf(&linha[0], "%d artigos\n", (nJou+nCou));
+ for(j=0;linha[j]!='\0'; j++)
+ {   estat_b[i] = linha[j];
+ i++;
+ }
+ sprintf(&linha[0], "  %d em revista\n", nJou);
+ for(j=0;linha[j]!='\0'; j++)
+ {   estat_b[i] = linha[j];
+ i++;
+ }
+ sprintf(&linha[0], "  %d em conferencia\n", nCou);
+ for(j=0;linha[j]!='\0'; j++)
+ {   estat_b[i] = linha[j];
+ i++;
+ }
+ 
+ // free(estat_b);
+ // free(linha);
+
+ fputs(estat_b, d);
+ */
