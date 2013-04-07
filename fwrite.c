@@ -16,9 +16,9 @@
 
 
 void imprimeE(int bool, int counter, char * file, char * path)     //FUNCAO COMPLETA
-{   //int i=0;
+{   int i=0;
     char inicio[35] = "Lista Rejeitadas\n----------------\n";
-    //char * output = malloc(100* sizeof(char));
+    char * output = malloc(100* sizeof(char));
     FILE * e;
     
     // Verifica se é a primeira escrita para o ficheiro
@@ -31,18 +31,18 @@ void imprimeE(int bool, int counter, char * file, char * path)     //FUNCAO COMP
     
     // Imprime para o ficheiro o conteúdo
     if (e)
-    {   //strcpy(output, path);
-        //i=(int) strlen(output);
+    {   strcpy(output, file);
+        i=(int) strlen(output);
         //dar espaco
-        //output[i]=' ';
+        output[i-1]=' ';
         //i++;
         //Converter inteiro para o buffer
-        fprintf(e, "%s %d\n",file, counter);
-//        sprintf(&output[i], "%d\n", counter);
-//        fputs(output, e);
+        //fprintf(e, "%s %d\n",file, counter);
+        sprintf(&output[i], "%d\n", counter);
+        fputs(output, e);
         fclose(e);
     }
-  //  free(output);
+    free(output);
 }
 
 
