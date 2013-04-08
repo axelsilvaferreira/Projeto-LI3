@@ -32,16 +32,19 @@ Stats parseLine(char * buffer, char t)
     s.ano=FALSE;
     
     /////////   P  A  R  S  E  R   ////////////
-
+    if (DEBUG_MODE) {printf("Buffer:%s#\n",buffer);}
+    
     // Valida numero inicial
     token = strsep(&buffer, " ");
     flag = validaNumeroI(&token);
     if (!flag || !buffer) {return s;}
+    if (DEBUG_MODE) {printf("Buffer:%s#\n",buffer);}
     
     // Valida Autores
     autores = strsep(&buffer, ":");
     flag = validaAutores(&autores);
     if (!flag || !buffer) {return s;}
+    if (DEBUG_MODE) {printf("Buffer:%s#\n\n\n",buffer);}
     
     // Valida Titulo
     token = strsep(&buffer, ".");

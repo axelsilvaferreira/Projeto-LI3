@@ -60,13 +60,11 @@ int leFicheiro(char * bufferList)
     if (indexC_J!=-1 && bufferLine)
     {   char type = bufferList[0];
         // Le cada linha do ficheiro
-        while (ret) //   <---------------------------####### PROBLEM HERE
+        while (ret) 
         { Stats entrada;
             ret=dynamic_read_line(&bufferLine, &bLine_size, indexC_J);
             if (ret==-1) {return ret;}
-            if (DEBUG_MODE) {printf("Buffer:#%s#\n",bufferLine);}
-
-
+            
             // Valida a linha
             entrada = parseLine(bufferLine, type);
             if (entrada.nomes)      
