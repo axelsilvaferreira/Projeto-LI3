@@ -61,22 +61,22 @@ int dynamic_read_line(char** buf, int* size, int index)
 	int old_size;
     
 	if (!fgets(*buf, *size, file[index]))
-    {   return -1; }
+    {   return FALSE; }
     
 	if ((*buf)[strlen(*buf) - 1] == '\n')
-    {   return 0; }
+    {   return TRUE; }
     
 	do  {   // we haven't read the whole line so grow the buffer
             old_size = *size;
             *size *= 2;
             *buf =(char *) realloc(*buf, *size);
             if (NULL == *buf) {
-			return -1;
+			return FALSE;
         }
 		offset = &((*buf)[old_size - 1]);
 	} while ( fgets(offset, old_size + 1, file[index]) && offset[strlen(offset) - 1] != '\n' );
     
-	return 0;
+	return TRUE;
 }
 
 
