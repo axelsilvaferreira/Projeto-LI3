@@ -14,7 +14,7 @@
 
 #define TRUE 1
 #define FALSE 0
-#define DEBUG_MODE TRUE            //  Modo debug TRUE / FALSE
+#define DEBUG_MODE FALSE            //  Modo debug TRUE / FALSE
 #define MAX_BUFFER_LIST 80          //  Buffer usado para ler entradas do ficheiro lista.txt
 #define MAX_BUFFER_ENTRY 800        //  Buffer usado para ler entradas dos ficheiros c/j-*.txt
 #define CONFERENCE 8

@@ -34,11 +34,11 @@ void imprimeE(int bool, int counter, char * file, char * path)     //FUNCAO COMP
     {   strcpy(output, file);
         i=(int) strlen(output);
         //dar espaco
-        output[i-1]=' ';
+        output[i]=' ';
         //i++;
         //Converter inteiro para o buffer
         //fprintf(e, "%s %d\n",file, counter);
-        sprintf(&output[i], "%d\n", counter);
+        sprintf(&output[i+1], "%d\n", counter);
         fputs(output, e);
         fclose(e);
     }
@@ -48,60 +48,17 @@ void imprimeE(int bool, int counter, char * file, char * path)     //FUNCAO COMP
 
 void imprimeD(int nRej, int nJou, int nCou, char * path)           // FUNCAO COMPLETA
 {   FILE * d = fopen(path, "w");
-    printf("%d\n%d\n%d\n", nRej, nJou, nCou);
     
     if (d)
     {   fprintf(d, "Estatistica basica\n------------------\n");
         fprintf(d, "%d entradas\n", (nRej+nJou+nCou));
         fprintf(d, "%d rejeitadas\n", nRej);
         fprintf(d, "%d artigos\n", (nJou+nCou));
-        fprintf(d, "  %d revista\n", nJou);
-        fprintf(d, "  %d conferencia\n", nCou);
+        fprintf(d, "  %d em revista\n", nJou);
+        fprintf(d, "  %d em conferencia\n", nCou);
         
         fclose(d);
     }
 }
 
 
-
-/*  
- // int i=38,j=0;
- char * estat_b = malloc( 200 * sizeof(char));
- char * linha = malloc( 100 * sizeof(char));
- char inicio[39] = "Estatistica basica\n------------------\n";
- 
-
-
- //strcpy(estat_b, inicio);
- 
- sprintf(&linha[0], "%d entradas\n", (nRej+nJou+nCou));
- for(j=0;linha[j]!='\0'; j++)
- {   estat_b[i] = linha[j];
- i++;
- }
- sprintf(&linha[0], "%d rejeitadas\n", nRej);
- for(j=0;linha[j]!='\0'; j++)
- {   estat_b[i] = linha[j];
- i++;
- }
- sprintf(&linha[0], "%d artigos\n", (nJou+nCou));
- for(j=0;linha[j]!='\0'; j++)
- {   estat_b[i] = linha[j];
- i++;
- }
- sprintf(&linha[0], "  %d em revista\n", nJou);
- for(j=0;linha[j]!='\0'; j++)
- {   estat_b[i] = linha[j];
- i++;
- }
- sprintf(&linha[0], "  %d em conferencia\n", nCou);
- for(j=0;linha[j]!='\0'; j++)
- {   estat_b[i] = linha[j];
- i++;
- }
- 
- // free(estat_b);
- // free(linha);
-
- fputs(estat_b, d);
- */
