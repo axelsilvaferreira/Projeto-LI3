@@ -101,6 +101,11 @@ int validaAno();
  */
 int validaPaginas();
 
+/**
+ * This function trims the first occurence
+ *
+ */
+char * trim();
 
 
 #endif
