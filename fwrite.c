@@ -48,14 +48,15 @@ void imprimeE(int bool, int counter, char * file, char * path)     //FUNCAO COMP
 
 void imprimeD(int nRej, int nJou, int nCou, char * path)           // FUNCAO COMPLETA
 {   FILE * d = fopen(path, "w");
+    printf("%d\n%d\n%d\n", nRej, nJou, nCou);
     
     if (d)
     {   fprintf(d, "Estatistica basica\n------------------\n");
         fprintf(d, "%d entradas\n", (nRej+nJou+nCou));
-        fprintf(d, "%d rejeitadas\n", (nRej+nJou+nCou));
-        fprintf(d, "%d artigos\n", (nRej+nJou+nCou));
-        fprintf(d, "  %d revista\n", (nRej+nJou+nCou));
-        fprintf(d, "  %d conferencia\n", (nRej+nJou+nCou));
+        fprintf(d, "%d rejeitadas\n", nRej);
+        fprintf(d, "%d artigos\n", (nJou+nCou));
+        fprintf(d, "  %d revista\n", nJou);
+        fprintf(d, "  %d conferencia\n", nCou);
         
         fclose(d);
     }

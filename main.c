@@ -63,7 +63,7 @@ int leFicheiro(char * bufferList)
         while (ret) 
         { Stats entrada;
             ret=dynamic_read_line(&bufferLine, &bLine_size, indexC_J);
-            if (ret==-1) {return ret;}
+            if (!ret) {break;}
             
             // Valida a linha
             entrada = parseLine(bufferLine, type);
@@ -80,7 +80,7 @@ int leFicheiro(char * bufferList)
                 }
             }
             else                    // Caso não seja válida
-            { lRej++;}
+            { lRej++; }
         }
         free(bufferLine);
     }
@@ -124,6 +124,7 @@ int main(int argc, const char * argv[])
             
             // Funcao que le o ficheiro e retorna o numero de rejeitados nesse ficheiro
             lRej = leFicheiro(bufferList);
+            nRej+=lRej;
             // Imprime o nome do ficheiro e o numero de Rejeitados.
             imprimeE(bool,lRej,bufferList, E_FILE);
             bool = FALSE;
