@@ -83,13 +83,7 @@ int leFicheiro(char * bufferList)
                 }
             }
             else                    // Caso não seja válida
-            { lRej++;
-                FILE * out = fopen("/Users/axelferreira/Desktop/dir/galho.txt", "a");
-                if (DEBUG_MODE==3) {fputs(bufferLine,out);}
-                fputs("\n", out);
-                fclose(out);
-    
-            }
+            { lRej++; }
         }
         free(bufferLine);
     }
@@ -127,12 +121,6 @@ int main(int argc, const char * argv[])
         
         // Pede uma linha do ficheiro lista.txt atraves do modulo fread
         rc = dynamic_read_line(&bufferList, &buffer_size, indexL);
-        
-        //////////////////---------------------------->
-        FILE * out = fopen("/Users/axelferreira/Desktop/dir/galho.txt", "a");
-        if (DEBUG_MODE==3) {fputs(bufferList, out);}
-        fclose(out);
-        //////////////////---------------------------->
         
         if (rc)         // caso o ficheiro não tenha acabado para
         {   
