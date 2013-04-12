@@ -21,19 +21,21 @@
 #define INIT_BUFFER_SIZE 500
 #define FILE_NAME_BUFFER 50
 
-#define DEBUG_MODE 3                    // <-----<<<  Toogle 1/0 to switch DEBUG_MODE ON/OFF
-#define PATH_MODE TRUE                      // <-----<<<  Comment to switch PATH_MODE OFF
-#ifdef PATH_MODE 
-    #define L_FILE "/Users/axelferreira/Desktop/dir/lista.txt"
-    #define D_FILE "/Users/axelferreira/Desktop/dir/D.txt"
-    #define E_FILE "/Users/axelferreira/Desktop/dir/E.txt"
-    #define G_FILE "/Users/axelferreira/Desktop/dir/G.txt"
-    #define _PATH_ "/Users/axelferreira/Desktop/dir/"
+#define DEBUG_MODE FALSE                    // <-----<<<  Toogle 1/0 to switch DEBUG_MODE ON/OFF
+#define PATH_MODE FALSE                     // <-----<<<  Comment to switch PATH_MODE OFF
+#define PATH_MOD
+#ifdef PATH_MOD
+#define L_FILE "/Users/axelferreira/Desktop/dir/lista.txt"
+#define D_FILE "/Users/axelferreira/Desktop/dir/D.txt"
+#define E_FILE "/Users/axelferreira/Desktop/dir/E.txt"
+#define G_FILE "/Users/axelferreira/Desktop/dir/G.txt"
+#define _PATH_ "/Users/axelferreira/Desktop/dir/"
 #else
-    #define L_FILE "lista.txt"
-    #define D_FILE "D.txt"
-    #define E_FILE "E.txt"
-    #define G_FILE "G.txt"
+#define L_FILE "lista.txt"
+#define D_FILE "D.txt"
+#define E_FILE "E.txt"
+#define G_FILE "G.txt"
+#define _PATH_ "./"
 #endif
 
 // Contadores do programa main
