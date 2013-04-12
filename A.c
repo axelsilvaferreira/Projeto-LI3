@@ -1,51 +1,42 @@
-//                                                                                                               //
-//  A.c                                                                                                          //
-//  LI3                                                                                                          //
-//                                                                                                               //
-//  Created by Axel Ferreira on 3/2/13.                                                                          //
-//  Copyright (c) 2013 Axel Ferreira. All rights reserved.                                                       //
-//                                                                                                               //
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                                                                                                 //
-#include <stdio.h>                                                                                               //
-#include <stdlib.h>                                                                                              //
-#include <limits.h>                 //  so e usado para INT_MAX                                                  //
-#include <string.h>                                                                                              //
-#include <ctype.h>                  // Verificas os caracteres alfanumericos                                     //
-#include "A.h"                                                                                                   //
-#include "F.h"
-//#include "Estruturas.h"                                                                                                   //
+//
+//  A.c
+//  LI3
+//
+//  Created by Axel Ferreira on 3/2/13.
+//  Copyright (c) 2013 Axel Ferreira. All rights reserved.
+//
+#include <stdio.h>
+#include <stdlib.h>
+#include "A.h"
+#include <limits.h>                 //  so e usado para INT_MAX
+#include <string.h>
+#include <ctype.h>                  // Verificas os caracteres alfanumericos
+#define TRUE 1
+#define FALSE 0
 
-#define TRUE 1                                                                                                   //
-#define FALSE 0                                                                                                  //
-                                                                                                                 //
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                                                                                                 //
-#define DEBUG_MODE FALSE            //  Modo debug TRUE / FALSE                                                  //
-#define PATH_MODE TRUE              //  Modo de caminho especificado TRUE / FALSE                                //
-                                                                                                                 //
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                                                                                                 //
-#define MAX_BUFFER_LIST 80          //  Buffer usado para ler entradas do ficheiro lista.txt                     //
-#define MAX_BUFFER_ENTRY 800        //  Buffer usado para ler entradas dos ficheiros c/j-*.txt                   //
-#define CONFERENCE 8                                                                                             //
-#define JOURNAL 6                                                                                                //
-#define DIMARRAY 6                  //  Dimensao do Array das palavras proibidas                                 //
-static int nProcessed = 0;          //  numero de entradas processadas                                           //
-static int nRejected = 0;           //  numero total de entradas rejeitadas                                      //
-static int nArticles = 0;           //  numero total de Artigos                                                  //
-static int nJournals = 0;           //  numero de Artigos em Revista                                             //
-static int nConference = 0;         //  numero de Artigos em Conferencia                                         //
-static int minPag = 0;              //  numero de Pag minimo para artigos                                        //
-static char * listaTXT  = "/Users/axelferreira/Desktop/dir/lista.txt";      //Endereço do ficheiro lista.txt     //
-static char * E_PATH    = "/Users/axelferreira/Desktop/dir/E.txt";          // Nome do ficheiro E.txt            //
-static char * E_NAME    = "E.txt";                                                                               //
-static char * D_PATH    = "/Users/axelferreira/Desktop/dir/D.txt";          // Dir dos ficheiros d               //
-static char * D_NAME    = "D.txt";                                                                               //
-static char * PATH      = "/Users/axelferreira/Desktop/dir/";               // Dir da pasta                      //
-static int firstTime    = TRUE;                                             // Var de controlo da funcao impimeE //
-                                                                                                                 //
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+#define DEBUG_MODE FALSE            //  Modo debug TRUE / FALSE                         //
+#define PATH_MODE FALSE             //  Modo de caminho especificado TRUE / FALSE       //
+//////////////////////////////////////////////////////////////////////////////////////////
+
+#define MAX_BUFFER_LIST 80          //  Buffer usado para ler entradas do ficheiro lista.txt
+#define MAX_BUFFER_ENTRY 800        //  Buffer usado para ler entradas dos ficheiros c/j-*.txt
+#define CONFERENCE 8
+#define JOURNAL 6
+#define DIMARRAY 6                  //  Dimensao do Array das palavras proibidas
+static int nProcessed = 0;          //  numero de entradas processadas
+static int nRejected = 0;           //  numero total de entradas rejeitadas
+static int nArticles = 0;           //  numero total de Artigos
+static int nJournals = 0;           //  numero de Artigos em Revista
+static int nConference = 0;         //  numero de Artigos em Conferencia
+static int minPag = 0;              //  numero de Pag minimo para artigos
+static char * listaTXT  = "/Users/axelferreira/Desktop/dir/lista.txt";      //Endereço do ficheiro lista.txt
+static char * E_PATH    = "/Users/axelferreira/Desktop/dir/E.txt";          // Nome do ficheiro E.txt
+static char * E_NAME    = "E.txt";
+static char * D_PATH    = "/Users/axelferreira/Desktop/dir/D.txt";          // Dir dos ficheiros d
+static char * D_NAME    = "D.txt";
+static char * PATH      = "/Users/axelferreira/Desktop/dir/";               // Dir da pasta
+static int firstTime = TRUE;                                                // Var de controlo da funcao imprimeE
 
 int getnProcessed()
 {   return nProcessed; }
@@ -90,41 +81,31 @@ void process()                               //FUNCAO COMPLETA
     FILE * lista=NULL;
     if (PATH_MODE==TRUE) { lista = fopen(listaTXT, "r");}
     else { lista = fopen("lista.txt", "r"); }
-/////////////////////////////////////////////////////////////////////////////////////////
-    initEstrutura();
-/////////////////////////////////////////////////////////////////////////////////////////
+
     if (lista)
-    {   // Ver numero min de pag a considerar.
-        fgets(min_pag, sizeof(min_pag), lista);
-        i = atoi(min_pag);
-        setMinPag(i);
+        {   // Ver numero min de pag a considerar.
+            fgets(min_pag, sizeof(min_pag), lista);
+            i = atoi(min_pag);
+            setMinPag(i);
         
-        // Percorrer a Lista.txt
-        while ( fgets(fileName, sizeof(fileName), lista) )
-        {   // Substituir o char final do fileName '\n' POR '\0'
-            for (i=0; fileName[i]!='\n' && fileName[i]!= '\0'; i++) {}
-            fileName[i] = '\0';
-            
-            // definir tipo Conferencia ou revista
-            if (fileName[0] == 'c') //&& buffer[1]=='-')
-            {   validFile(fileName, CONFERENCE);
+            // Percorrer a Lista.txt
+            while ( fgets(fileName, sizeof(fileName), lista) )
+            {   // Substituir o char final do fileName '\n' POR '\0'
+                for (i=0; fileName[i]!='\n' && fileName[i]!= '\0'; i++) {}
+                fileName[i] = '\0';
+          
+                // definir tipo Conferencia ou revista
+                if (fileName[0] == 'c') //&& buffer[1]=='-')
+                    {   validFile(fileName, CONFERENCE);
+                    }
+                else
+                    {   validFile(fileName, JOURNAL);
+                    }
+                imprimeD();
             }
-            else
-            {   validFile(fileName, JOURNAL);
-            }
-            imprimeD();
+            fclose(lista);
         }
-        fclose(lista);
-    }
     free(min_pag);
-    
-/////////////////////////////////////////////////////////////////////////////////////////
-    imprimeG();
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-    freeEstrutura();
-/////////////////////////////////////////////////////////////////////////////////////////
-    
 }
 
 void imprimeE(int counter, char * fileN)     //FUNCAO COMPLETA
@@ -146,17 +127,17 @@ void imprimeE(int counter, char * fileN)     //FUNCAO COMPLETA
     }
     
     // Imprime para o ficheiro o conteúdo
-    if (e)
-    {   strcpy(output, fileN);
-        i=(int) strlen(output);
-        //dar espaco
-        output[i]=' ';
-        i++;
-        //Converter inteiro para o buffer
-        sprintf(&output[i], "%d\n", counter);
-        fputs(output, e);
-        fclose(e);
-    }
+        if (e)
+        {   strcpy(output, fileN);
+            i=(int) strlen(output);
+            //dar espaco
+            output[i]=' ';
+            i++;
+            //Converter inteiro para o buffer
+            sprintf(&output[i], "%d\n", counter);
+            fputs(output, e);
+            fclose(e);
+        }
     free(output);
     free(path);
 }
@@ -171,11 +152,11 @@ void imprimeD()                              // FUNCAO COMPLETA
     char * estat_b = malloc( 200 * sizeof(char));
     char * linha = malloc( 100 * sizeof(char));
     char inicio[39] = "Estatistica basica\n------------------\n";
-    
+
     
     if (d)
     {   strcpy(estat_b, inicio);
-        
+
         p=getnProcessed();
         sprintf(&linha[0], "%d entradas\n", p);
         for(j=0;linha[j]!='\0'; j++)
@@ -206,10 +187,10 @@ void imprimeD()                              // FUNCAO COMPLETA
         {   estat_b[i] = linha[j];
             i++;
         }
-        
-        
-        fputs(estat_b, d);
-        fclose(d);
+
+    
+    fputs(estat_b, d);
+    fclose(d);
     }
     free(path);
     free(estat_b);
@@ -223,20 +204,20 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
     char *fileName = malloc(200*sizeof(char));
     // Cria caminho do ficheiro
     if (PATH_MODE == TRUE)  {   strcpy(fileName,PATH);
-        i =(int) strlen(PATH);
-        strcpy(&fileName[i], fileN);
-    }
+                                i =(int) strlen(PATH);
+                                strcpy(&fileName[i], fileN);
+                            }
     else {   strcpy(fileName, fileN); }
     
     FILE * ficheiro = fopen(fileName, "r");
     if (ficheiro)
     {   char * bLine = malloc(MAX_BUFFER_ENTRY * sizeof(char));
-        if(DEBUG_MODE==TRUE) {printf("%s\n",fileN);}
+                if(DEBUG_MODE==TRUE) {printf("%s\n",fileN);}
         //le inha a linha do ficheiro
         while (fgets(bLine, MAX_BUFFER_ENTRY, ficheiro))
-        { int flag = TRUE, ano=0,nAut=0;
-            tofree = string = strdup(bLine);
-            static char *forbiddenW[DIMARRAY] = {"ISBN","PREFACE","EDITORIAL","ERRATA","OBITUARY","IN MEMORY OF"};
+        { int flag = TRUE;
+          tofree = string = strdup(bLine);
+          static char *forbiddenW[DIMARRAY] = {"ISBN","PREFACE","EDITORIAL","ERRATA","OBITUARY","IN MEMORY OF"};
             
             
             //converte tudo para maiusculas
@@ -246,31 +227,28 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
             for (i=0;(flag==TRUE) && (i<DIMARRAY);i++)
             {   if (strstr(bLine, forbiddenW[i])) { flag=FALSE;
                 if(DEBUG_MODE) {printf("REJEITADA\nContém:%s\n",forbiddenW[i]);}
-            }
+                                                  }
             }   // incrementa os processados
-            incnProcessed();
+                incnProcessed();
             
-            if(flag==TRUE)  // Numero Inicial
-            {   token = strsep(&string, " ");
-                if (!token || !string) { flag = FALSE; }
-                else { flag = validaNumeroI(token); }
-            }
-            if(flag==TRUE)  // Autores
-            {   token = strsep(&string, ":");
-                if (!token || !string) { flag = FALSE; }
-                else {  nAut = validaAutores(token);
-                        if (nAut == FALSE) {flag = FALSE;}
-                        else {flag = TRUE;}
-                     }
-            }
-            if(flag==TRUE)  // Titulo
-            {   if (string[0] == ' ') { string++; }
-                token = strsep(&string, ".");
-                if (!token || !string) { flag = FALSE; }
-                else { flag = validaTitulo(token); }
-            }
+                if(flag==TRUE)  // Numero Inicial
+                {   token = strsep(&string, " ");
+                    if (!token || !string) { flag = FALSE; }
+                    else { flag = validaNumeroI(token); }
+                }
+                if(flag==TRUE)  // Autores
+                {   token = strsep(&string, ":");
+                    if (!token || !string) { flag = FALSE; }
+                    else { flag = validaAutores(token);}
+                }
+                if(flag==TRUE)  // Titulo
+                {   if (string[0] == ' ') { string++; }
+                    token = strsep(&string, ".");
+                    if (!token || !string) { flag = FALSE; }
+                    else { flag = validaTitulo(token); }
+                }
             if (tipo == JOURNAL) ///////// J O U R N A L /////////
-            { 
+            { char * whatever=tofree;
                 if(flag==TRUE)  // Nome Journal
                 {   if (string[0] == ' ') {string++;}
                     token = strsep(&string, "(");
@@ -299,63 +277,57 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
                     if (!token || !string) {flag = FALSE;}
                     else
                     {   // testa se e numero###############################
-                        i=0;
-                        j=0;
                         i=atoi(token);
                         if(DEBUG_MODE==TRUE) {printf("PagI:%s\n", token);}
                         token = strsep(&string, " ");
                         if (!token || !string) {flag = FALSE;}
                         else {  // testa se e numero ########################
-                            j=atoi(token);
-                            if (((j-i)+1) < minPag)
-                            {flag=FALSE;}
+                                j=atoi(token);
+                                if (((j-i)+1) < minPag)
+                                {flag=FALSE;}
                             if(DEBUG_MODE==TRUE) {printf("PagF:%s\nnMinP:%d\n", token,x);}
-                        }
+                             }
                     }
                 }
                 if(flag==TRUE)  // Ano Revista
                 {   // Valida o ano
-                    ano = validaAno(string);
-                    if (ano == FALSE) {flag = FALSE;}
-                    else {flag = TRUE;}
+                    flag = validaAno(string);
                 }
-
+                if (!flag)  {   if (DEBUG_MODE==TRUE)
+                                {   token  = strsep(&whatever, " ");
+                                    printf("%s\n", token);
+                                }
+                            }
             }
             else ///////// C O N F E R E N C E /////////
             { char * whatever=tofree;
                 if(flag==TRUE)  // Nome Conferencia e Data
                 {   if (string[0] == ' ') {string++;}
                     token = strsep(&string, ":");
-                    ano = validaNomeConfData(token);
-                    if (ano == FALSE) {flag = FALSE;}
-                    else {  flag = TRUE;
-                         }
-                }
+                    flag = validaNomeConfData(token); }
                 if(flag==TRUE)  // Paginas Conferencia
                 {   flag = validaPaginas(string); }
                 
                 if (!flag)  {   if(DEBUG_MODE==TRUE) {  printf("\nFALHA:%s\n", tofree); }
-                    if(DEBUG_MODE==TRUE) {  token  = strsep(&whatever, " ");
-                        printf("%s\n", token);
-                    }
-                }
+                                if(DEBUG_MODE==TRUE) {  token  = strsep(&whatever, " ");
+                                                        printf("%s\n", token);
+                                                     }
+                            }
+
             }
             
-            ///////////// CONTAGEM ////////////////////////
+            // CONTAGEM
             if (flag==TRUE)
             {   incnArticles();
-                addnArt(ano,nAut);
                 if (tipo == JOURNAL)
-                {   incnJournals(); }
-                else
-                {   incnConferences(); }
+                {incnJournals();}
+                else {incnConferences();}
                 if(DEBUG_MODE==TRUE) {printf("ACEITADA\n\n");}
             }
-            else
-            {   incnRejected();
-                cont_rej_local++;
-                if(DEBUG_MODE==TRUE) {printf("REJEITADA\n\n");}
-            }
+            else {  incnRejected();
+                    cont_rej_local++;
+                    if(DEBUG_MODE==TRUE) {printf("REJEITADA\n\n");}
+                 }
             
             free(tofree);
         }
@@ -368,27 +340,25 @@ int validFile(char * fileN, int tipo)  //FUNCAO COMPLETA
     return ret;
 }
 
-//_______________________________________________________________________________\\
-//###############################################################################\\
-//######################/ _____   |######/ |####|  |#####/ \###/  /##############\\
-//#####################|  |####|  |#####|  |####|  |#####\  \#/  /###############\\
-//#####################|   ____   |#####|  |####|  |######      #################\\
-//#####################|  |####|  |#####|  |####|  |####/  /#\   \###############\\
-//#####################|__|####|__/#####|__________/###/__/###\__/###############\\
-//###############################################################################\\
-//-------------------------------------------------------------------------------\\
+
+//##############################################################################
+//######################       ###### ####  ###### ####  #######################
+//#####################  ####  #####  ####  ######  ##  ########################
+//#####################        #####  ####  #######    #########################
+//#####################  ####  #####  ####  ######  ##  ########################
+//#####################  #### ######       ######  #### ########################
+//##############################################################################
+
 
 int validaNumeroR(char * token)
 { int i=0, flag = TRUE, flag2 = TRUE;
-    
+
     // testa se e numero ##########################
     for (i=0;token[i]!='\0';i++)
     {   if (!(isdigit(token[i]))) {flag2 = FALSE;}}
     if (flag2==FALSE) {flag = FALSE;}
     if(DEBUG_MODE==TRUE) {printf("NumeroR:%s\n", token);}
-    
-    
-    
+
     return flag;
 }
 
@@ -399,11 +369,11 @@ int validaVolume(char * token)
     
     for (i=0;token[i]!='\0';i++)
     {   if (!(isdigit(token[i])))
-    {flag = FALSE;}
+        {flag = FALSE;}
     }
     if(DEBUG_MODE==TRUE) {printf("Volume:%s\n", token);}
-    
-    
+
+
     return flag;
 }
 
@@ -414,10 +384,10 @@ int validaNumeroI(char * token)
     if (DEBUG_MODE==TRUE) {printf("numero :%s\n", token);}
     for(i=0;token[i]!='\0';i++)
     {   if (!(isdigit(token[i])))
-    {   flag=FALSE; }
+        {   flag=FALSE; }
     }
     
-    if (DEBUG_MODE==TRUE && (flag==FALSE)) {printf("%s Not Digit\n", token);}
+    if (DEBUG_MODE==TRUE) {printf("%s Not Digit\n", token);}
     
     return flag;
 }
@@ -425,21 +395,21 @@ int validaNumeroI(char * token)
 int validaTitulo(char * token)
 {   int flag = TRUE, flag2=FALSE, i=0;
     
-    if(DEBUG_MODE==TRUE) {printf("titulo :%s\n", token);}
+        if(DEBUG_MODE==TRUE) {printf("titulo :%s\n", token);}
     
     
-    // verifica se tem titulo (pelo menos um char)
-    for (i=0;(token[i]!='\0') && flag2==FALSE;i++)
-    {   if (isalnum(token[i])!=0) {flag2 = TRUE; } }
-    if (flag2==FALSE) { flag = FALSE;
-        if (DEBUG_MODE==TRUE) { printf("No_Titulo");}}
+        // verifica se tem titulo (pelo menos um char)
+        for (i=0;(token[i]!='\0') && flag2==FALSE;i++)
+        {   if (isalnum(token[i])!=0) {flag2 = TRUE; } }
+        if (flag2==FALSE) { flag = FALSE;
+                            if (DEBUG_MODE==TRUE) { printf("No_Titulo");}}
     
     return flag;
 }
 
 
 int validaAutores(char * token)
-{   int i=0 , flag = TRUE, flag2=FALSE, nAut=0;
+{   int i=0 , flag = TRUE, flag2=FALSE;
     
     if (!token) {flag = FALSE;}
     if(DEBUG_MODE==TRUE) {printf("autores:%s\n", token);}
@@ -447,18 +417,14 @@ int validaAutores(char * token)
     for (i=0;(token[i]!='\0') && flag2==FALSE;i++)
     {   if (isalpha(token[i])!=0) {flag2 = TRUE;}}
     if (flag2==FALSE) { flag = FALSE; if (DEBUG_MODE==TRUE) { printf("No_Authors\n");}}
-    // Conta o numero de autores
-    else {  for(i=0;strsep(&token, ",");i++) {}
-            nAut = i;
-         }
     
-    return nAut;
+    return flag;
 }
 
 
 int validaSiglaJour(char * token)
 {   int i=0, flag = FALSE;
-    
+
     if (!token) {flag = FALSE;}
     for (i=0;token[i]!='\0';i++)
     {   if (isalpha(token[i])) {flag = TRUE;}}
@@ -478,17 +444,17 @@ int validaNomeJour(char * token)
     if (!token) {flag = FALSE;}
     else
     {   if(DEBUG_MODE==TRUE) {printf("NomeR:%s\n", token);}
-        
+    
         for (i=0;token[i]!='\0';i++)
         { if (isalnum(token[i])!=0) {flag2 = TRUE;} }
-        
+    
         if (flag2 == FALSE) {flag = FALSE;}
     }
     return flag;
 }
 
 int validaNomeConfData(char * token)
-{ int i=0,j=0,flag=TRUE,ano=FALSE;
+{ int i=0,j=0,flag=TRUE;
     char * data = NULL;
     
     if (token==NULL) {flag = FALSE;}
@@ -501,26 +467,19 @@ int validaNomeConfData(char * token)
     { if (isdigit(token[i])==0) {flag = TRUE;} }
     if(DEBUG_MODE==TRUE) { printf("NomeC  :%s\nData   :%s\n", token, data); }
 
-        ano=atoi(data);
-
-    return ano;
+    return flag;
 }
 
 int validaAno(char * string)
-{ int flag=TRUE, ano=FALSE;
+{ int flag=TRUE;
     char * token = NULL;
     
     if (string[0] == '(') {string++;}
     token = strsep(&string, ")");
+    if (!token) {flag = FALSE;}
+    if(DEBUG_MODE==TRUE) {printf("ANO    :%s\n", token);}
     
-    
-    
-    /////////////////////////////////////////////////////////////
-    // Adiciona o ano a estrutura de dados
-    if (flag==TRUE)
-    {   ano=atoi(token); }
-    
-    return ano;
+    return flag;
 }
 
 
@@ -538,7 +497,7 @@ int validaPaginas(char * string)
             if ((j-i+1) < minPag)
             {flag=FALSE;}
             if(DEBUG_MODE==TRUE) {printf("PagI   :%d\nPagF   :%d\n", i, j);}
-            
+
         }
     }
     return flag;
