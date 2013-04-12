@@ -34,78 +34,82 @@ Stats parseLine(char * buffer, char t)
 
     /////////   P  A  R  S  E  R   ////////////
     if (DEBUG_MODE) {printf("_______________________________________________\n");}
-    if (DEBUG_MODE) {printf("%s",buffer);}
+    if (DEBUG_MODE) {printf("%s\n",buffer);}
     
     // Valida numero inicial
-    token = strsep(&buffer, " ");
-    token = trim(token);
+    buffer = trim(buffer);
+    token = strsep(&buffer, " \t");
     flag = validaNumeroI(token);
     if (!flag || !buffer) {return s;}
-    if (DEBUG_MODE) {printf("Numero I  :%s#\n",token);}
+    if (DEBUG_MODE) {printf("%dNumero I :%s#\n",flag ,token);}
     
     // Valida Autores
     autores = strsep(&buffer, ":");
-    token = trim(token);
+    autores = trim(autores);
     flag = validaAutores(autores);
     if (!flag || !buffer) {return s;}
-    if (DEBUG_MODE) {printf("Autores   :%s#\n",autores);}
+    if (DEBUG_MODE) {printf("%dAutores  :%s#\n",flag,autores);}
     
     // Valida Titulo
     token = strsep(&buffer, ".");
     token = trim(token);
     flag = validaTitulo(token);
     if (!flag || !buffer) {return s;}
-    if (DEBUG_MODE) {printf("Titulo    :%s#\n",token);}
-    
+    if (DEBUG_MODE) {printf("%dTitulo   :%s#\n",flag,token);}
     
     if (t == 'j')           /////////// ( J O U R N A L ) ///////////
     {   // Valida Nome da Revista
         token = strsep(&buffer, "(");
+        token = trim(token);
         flag = validaNomeJour(token);
         if (!flag || !buffer) {return s;}
-        if (DEBUG_MODE) {printf("J Nome    :%s#\n",token);}
-        
+        if (DEBUG_MODE) {printf("%dJ Nome   :%s#\n",flag,token);}
+
         // Valida Sigla da Revista
         token = strsep(&buffer, ")");
+        token = trim(token);
         flag = validaSiglaJour(token);
         if (!flag || !buffer) {return s;}
-        if (DEBUG_MODE) {printf("J Sigla   :%s#\n",token);}
+        if (DEBUG_MODE) {printf("%dJ Sigla  :%s#\n",flag,token);}
         
         // Valida Volume da Revista
         token = strsep(&buffer, "(");
+        token = trim(token);
         flag = validaVolume(token);
         if (!flag || !buffer) {return s;}
-        if (DEBUG_MODE) {printf("J Volume   :%s#\n",token);}
+        if (DEBUG_MODE) {printf("%dJ Volume  :%s#\n",flag,token);}
         
         // Valida Numero da Revista
         token = strsep(&buffer, ")");
+        token = trim(token);
         flag = validaNumeroR(token);
         if (!flag || !buffer) {return s;}
-        if (DEBUG_MODE) {printf("J N Revista:%s#\n",token);}
+        if (DEBUG_MODE) {printf("%dJ N Revist:%s#\n",flag,token);}
         
         // Valida Paginas da Revista
         token = strsep(&buffer, "(");
+        token = trim(token); token++; // Ignora os ':' e ' '
         flag = validaPaginas(token);
         if (!flag || !buffer) {return s;}
-        if (DEBUG_MODE) {printf("J Paginas  :%s#\n",token);}
+        if (DEBUG_MODE) {printf("%dJ Paginas :%s#\n",flag,token);}
         
         // Valida Ano da Revista
         token = strsep(&buffer, ")");
         s.ano = validaAno(token);
         if (!s.ano) {return s;}
-        if (DEBUG_MODE) {printf("J Ano     :%s#\n",token);}
+        if (DEBUG_MODE) {printf("%dJ Ano    :%s#\n",flag,token);}
     }
     else if (t == 'c')      /////////// ( C O N F E R E N C E ) ///////////
     {   // Valida Nome da Conferencia
         token = strsep(&buffer, ":");
         ano = validaNomeConfData(token);
         if (!ano || !buffer) {return s;}
-        if (DEBUG_MODE) {printf("C Nome  Data:%s#\n",token);}
+        if (DEBUG_MODE) {printf("%dC Nome Data:%s#\n",flag,token);}
         
         // Valida Paginas da Conferencia
         flag = validaPaginas(buffer);
         if (!flag) {return s;}
-        if (DEBUG_MODE) {printf("C Paginas  :%s#\n",token);}
+        if (DEBUG_MODE) {printf("%dC Paginas :%s#\n",flag,token);}
     }
     
     ///////////  Valida  Autores  ///////////
@@ -137,6 +141,7 @@ int validaNumeroR(char * token)
 { int i=0, flag = TRUE, flag2 = TRUE;
     
     if (!token) {return FALSE;}
+    if (DEBUG_MODE==2) {printf("NumeroR   :%s#\n",token);}
     
     // testa se e numero ##########################
     for (i=0;token[i]!='\0';i++)
@@ -152,7 +157,7 @@ int validaVolume(char * token)
 {   int i=0,flag = TRUE;
         
     if (!token) {return FALSE;}
-    
+    if (DEBUG_MODE==2) {printf("Volume    :%s#\n",token);}
     for (i=0;token[i]!='\0';i++)
     {   if (!(isdigit(token[i])))
         {flag = FALSE;}
@@ -165,7 +170,7 @@ int validaNumeroI(char * token)
 {int i=0, flag = TRUE;
     
     if (!token) {return FALSE;}
-    
+    if (DEBUG_MODE==2) {printf("NumeroI:%s#\n",token);}
     for(i=0;token[i]!='\0';i++)
     {   if (!(isdigit(token[i])))
         {  flag=FALSE; }
@@ -175,28 +180,19 @@ int validaNumeroI(char * token)
 }
 
 int validaTitulo(char * token)
-{   int flag = TRUE, flag2=FALSE, i=0;
-    static char *forbiddenW[DIMARRAY] = {"ISBN","PREFACE","EDITORIAL","ERRATA","OBITUARY","IN MEMORY OF"};
-    char * tofree=NULL, * string=NULL;
-    
+{   int flag = TRUE, i=0;
+    static char *forbiddenW[DIMARRAY] = {"ISBN", "PREFACE", "EDITORIAL", "ERRATA", "OBITUARY", "IN MEMORY OF"};
 
     if (!token) {return FALSE;}
-    
-    // PROCURA PALAVRAS PROIBIDAS
-    tofree = string = strdup(token);
+    if (DEBUG_MODE==2) {printf("Titulo    :%s#\n",token);}
+
     //converte tudo para maiusculas
     for (i=0;token[i]!='\0';i++)
     {   token[i] = toupper(token[i]); }
     //procura palavras proibidas
-    for (i=0;(flag==TRUE) && (i<(DIMARRAY-1));i++)
-    {   if (strstr(token, forbiddenW[i])) { return FALSE; } }
-    
-    // verifica se tem titulo (pelo menos um char)
-    for (i=0;(token[i]!='\0') && flag2==FALSE;i++)
-    {   if (isalnum(token[i])!=0) {flag2 = TRUE; } }
-    if (flag2==FALSE) { flag = FALSE;}
-    
-    free(tofree);
+    for (i=0;(flag==TRUE) && (i<(DIMARRAY));i++)
+    {   if (strstr(token, forbiddenW[i])) { flag = FALSE; } }
+
     return flag;
 }
 
@@ -205,7 +201,7 @@ int validaAutores(char * token)
 {   int i=0 , flag = TRUE, flag2=FALSE;
     
     if (!token) {return FALSE;}
-    
+    if (DEBUG_MODE==2) {printf("Autores   :%s#\n",token);}
     //Verifica se há autores
     for (i=0;(token[i]!='\0' && !flag2) && flag2==FALSE;i++)
     {   if (isalpha(token[i])) { flag2 = TRUE; } }
@@ -219,7 +215,7 @@ int validaSiglaJour(char * token)
 {   int i=0, flag = TRUE;
     
     if (!token) {return FALSE;}
-    
+    if (DEBUG_MODE==2) {printf("Sigla Jou :%s#\n",token);}
     for (i=0;token[i]!='\0';i++)
     {   if (!isalpha(token[i]) || !isupper(token[i]))
         { return FALSE; }
@@ -232,10 +228,10 @@ int validaNomeJour(char * token)
 { int flag=TRUE, i=0, flag2=FALSE;
     
     if (!token) {return FALSE;}
-        
+    if (DEBUG_MODE==2) {printf("Nome Jou  :%s#\n",token);}
         for (i=0;token[i]!='\0';i++)
-        { if (isalnum(token[i])!=0) {flag2 = TRUE;} }
-        
+        { //if (isalnum(token[i])!=0) {flag2 = TRUE;} }
+            if (isalpha(token[i])!=0) {flag2 = TRUE; }}
         if (flag2 == FALSE) {flag = FALSE;}
     
     return flag;
@@ -246,7 +242,7 @@ int validaNomeConfData(char * token)
     char * data = NULL;
     
     if (!token) {return FALSE;}
-    
+    if (DEBUG_MODE==2) {printf("Nome Dat C:%s#\n",token);}
     i = (int) strlen(token);
     j = (i-4);
     data = strdup(&token[j]);
@@ -264,7 +260,7 @@ int validaAno(char * string)
 { int flag=TRUE, ano=FALSE;
     
     if (!string) {return FALSE;}
-    
+    if (DEBUG_MODE==2) {printf("Ano       :%s#\n",string);}
     if (flag) { ano = atoi(string); }
     
     return ano;
@@ -276,7 +272,7 @@ int validaPaginas(char * string)
     int i=0,j=0,flag =TRUE;
     
     if (!string) {return FALSE;}
-    
+    if (DEBUG_MODE==2) {printf("Paginas   :%s#\n",string);}
     token = strsep(&string, "-");
     if (!token || !string) {return FALSE;}
     else
@@ -293,7 +289,7 @@ int validaPaginas(char * string)
 
 char * trim(char * token)
 {
-    for(;token[0]==' ';token++){}
+    for(;token && (token[0]==' ' || token[0]=='\t');token++){}
     
     return token;
 }

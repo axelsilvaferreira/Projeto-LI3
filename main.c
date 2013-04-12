@@ -21,7 +21,7 @@
 #define INIT_BUFFER_SIZE 500
 #define FILE_NAME_BUFFER 50
 
-#define DEBUG_MODE 1                    // <-----<<<  Toogle 1/0 to switch DEBUG_MODE ON/OFF
+#define DEBUG_MODE 3                    // <-----<<<  Toogle 1/0 to switch DEBUG_MODE ON/OFF
 #define PATH_MODE TRUE                      // <-----<<<  Comment to switch PATH_MODE OFF
 #ifdef PATH_MODE 
     #define L_FILE "/Users/axelferreira/Desktop/dir/lista.txt"
@@ -52,19 +52,20 @@ int leFicheiro(char * bufferList)
         indexC_J = openFile(s, "r");
     }
     else {indexC_J = openFile(bufferList, "r");}
-    
+
     bufferLine = (char *) realloc(NULL, INIT_BUFFER_SIZE * sizeof(char));
     // ^ Abre o ficheiro no controlo && cria um buffer.
-
+    
     // Caso tenha conseguido abrir o ficheiro e alocar o buffer
     if (indexC_J!=-1 && bufferLine)
     {   char type = bufferList[0];
         // Le cada linha do ficheiro
         while (ret) 
         { Stats entrada;
+
             ret=dynamic_read_line(&bufferLine, &bLine_size, indexC_J);
             if (!ret) {break;}
-            
+
             // Valida a linha
             entrada = parseLine(bufferLine, type);
             if (entrada.nomes)      
@@ -80,7 +81,13 @@ int leFicheiro(char * bufferList)
                 }
             }
             else                    // Caso não seja válida
-            { lRej++; }
+            { lRej++;
+                FILE * out = fopen("/Users/axelferreira/Desktop/dir/galho.txt", "a");
+                if (DEBUG_MODE==3) {fputs(bufferLine,out);}
+                fputs("\n", out);
+                fclose(out);
+    
+            }
         }
         free(bufferLine);
     }
@@ -95,8 +102,11 @@ int main(int argc, const char * argv[])
     char * bufferList;
 	int buffer_size = FILE_NAME_BUFFER * sizeof(char);
 	int rc = TRUE;
-    
 
+    char * s = strdup("191	   	Ron Aharoni: A principle of symmetry in networks. Discrete Mathematics (DM) 44(1):1-11 (1983)");
+    parseLine(s, 'j');
+    
+    
     // Inicializa o controlo & Abre o ficheiro lista.txt && Alloca o buffer
     init_file_control();                        // Inicializa o controlo de ficheiros
     indexL = openFile(L_FILE, "r");             // Abre o ficheiro lista.txt
@@ -112,12 +122,18 @@ int main(int argc, const char * argv[])
     // Ciclo que percorre todo o ficheiro  lista.txt
 	while(rc)
 	{ int lRej=0;
-
+        
         // Pede uma linha do ficheiro lista.txt atraves do modulo fread
         rc = dynamic_read_line(&bufferList, &buffer_size, indexL);
-
+        
+        //////////////////---------------------------->
+        FILE * out = fopen("/Users/axelferreira/Desktop/dir/galho.txt", "a");
+        if (DEBUG_MODE==3) {fputs(bufferList, out);}
+        fclose(out);
+        //////////////////---------------------------->
+        
         if (rc)         // caso o ficheiro não tenha acabado para
-        {
+        {   
             // REMOVE OS \n do BUFFER
             for (i=0;i<buffer_size && bufferList[i]!='\n'; i++) {}
             if (bufferList[i]=='\n') {bufferList[i]='\0';}
@@ -135,63 +151,13 @@ int main(int argc, const char * argv[])
     imprimeD(nRej, nJou, nCon, D_FILE);
 
     
-    closeFile(indexL);
+    closeFile(indexL); 
+    
     return 0;
 }
     
-    
-    
-    
-    
-    /*
-    
-    
-    int bool = TRUE, i=0;
-    char file_Name[FILE_NAME_BUFFER];
-    char * line = NULL;
-    struct sStats * lInfo = NULL;
-    FILE * lista = fopen(L_FILE, "r");
-//////////////////
-    char fileName[FILE_NAME_BUFFER];    //buffer para entradas lista.txt
-    char * min_pag = malloc(4 * sizeof(char));
-    
-    if (lista)
-    {   // Ver numero min de pag a considerar.
-        fgets(min_pag, sizeof(min_pag), lista);
-        i = atoi(min_pag);
-        setMinPag(i);
-        //////////////////
-        
-        // Processa os ficheiros todos
-        while (fgets(fileName, sizeof(fileName), LISTA))
-        {   int file_rej=0;
-            char t = file_Name[0];
-            // Processa as linhas todas do ficheiro
-            while ((line = (leLinha(file_Name, t))))
-            {  // lInfo = parseLine(line);
-                nPro++;
-            
-                if (!lInfo) // Verifica se é ou não válida e incrementa os contadores respetivos
-                { file_rej++; nRej++; }
-                else
-                {   if (t=='c') { nCon++;}
-                    else { nJou++;}
-                    process(); // guardar lInfo autores e ano | adicionar os contadores no ano...  <----------------<<<<<<
-                }
-            }
-            // Imprime o Ficheiro E
-            imprimeE(bool,file_rej, file_Name);
-            if (bool==TRUE) { bool=FALSE; }
-        }
-        // Imprime o Ficheiro D
-        imprimeD(nPro,nRej,nJou,nCon);
-    
-    }
-    
-     
-     
-     
-     
+
+/*
 if (DEBUG_MODE==TRUE)
 {
     time_t t = time(NULL);
@@ -199,8 +165,4 @@ if (DEBUG_MODE==TRUE)
     if (DEBUG_MODE == TRUE);
     {printf("now: \n%d\n-%d-%d %d:%d:%d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);}
 }
-    
-    */
-    
-
-
+*/
