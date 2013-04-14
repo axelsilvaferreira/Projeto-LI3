@@ -14,6 +14,7 @@
 #include "fread.h"
 #include "fwrite.h"
 #include "parser.h"
+#include "est_fase2.h"
 
 // Macros
 #define TRUE 1
@@ -22,7 +23,7 @@
 #define FILE_NAME_BUFFER 50
 
 #define DEBUG_MODE FALSE                    // <-----<<<  Toogle 1/0 to switch DEBUG_MODE ON/OFF
-#define PATH_MODE FALSE                     // <-----<<<  Comment to switch PATH_MODE OFF
+#define PATH_MODE TRUE                     // <-----<<<  Comment to switch PATH_MODE OFF
 #define PATH_MOD
 #ifdef PATH_MOD
 #define L_FILE "/Users/axelferreira/Desktop/dir/lista.txt"
@@ -42,6 +43,8 @@
 static int nRej = 0;
 static int nJou = 0;
 static int nCon = 0;
+
+
 
 int leFicheiro(char * bufferList)
 {   int indexC_J = -1, ret=TRUE, lRej=0, bLine_size = (INIT_BUFFER_SIZE * sizeof(char));
@@ -74,6 +77,7 @@ int leFicheiro(char * bufferList)
             {   if (type=='c')      // Caso seja Conf
                 {   nCon++;
                     // Adiciona dados a estrutura dos contadores
+                    
                     // Adiciona dados a estrutura dos Autores
                 }
                 else                // Caso seja Revista
@@ -94,7 +98,7 @@ int leFicheiro(char * bufferList)
 
 
 int main(int argc, const char * argv[])
-{   int i, bool = TRUE, indexL=-1;
+{   int i, bool = TRUE, indexL = -1;
     char * bufferList;
 	int buffer_size = FILE_NAME_BUFFER * sizeof(char);
 	int rc = TRUE;
@@ -139,7 +143,9 @@ int main(int argc, const char * argv[])
 	free(bufferList);
     // Imprime o ficheiro D
     imprimeD(nRej, nJou, nCon, D_FILE);
-
+    
+    // Imprime o ficheiro G.csv
+    
     
     closeFile(indexL); 
     

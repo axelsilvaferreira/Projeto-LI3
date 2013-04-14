@@ -1,5 +1,5 @@
 //
-//  F.c
+//  est_fase2.c
 //  LI3
 //
 //  Created by Axel Ferreira on 3/2/13.

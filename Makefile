@@ -1,6 +1,6 @@
 CC 		= gcc
 CFLAGS	= -Wall -Wextra -O2 #-pedantic -g
-OBJS 	= main.o fread.o fwrite.o parser.o
+OBJS 	= main.o fread.o fwrite.o parser.o est_fase2.o
 
 
 PARSER_LI3: $(OBJS)
@@ -17,6 +17,9 @@ fwrite.o: fwrite.h fwrite.h
 
 parser.o: parser.h parser.c
 	$(CC) $(CFLAGS) -c parser.c
+
+est_fase2.o: est_fase2.h est_fase2.c
+	$(CC) $(CFLAGS) -c est_fase2.c
 
 all:
 	make PARSER_LI3
