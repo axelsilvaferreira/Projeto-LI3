@@ -7,20 +7,12 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>                 //  so e usado para INT_MAX
 #include <string.h>
-#include <ctype.h>                  // Verificas os caracteres alfanumericos
-#include <math.h>
-#include "F.h"
-//#include "Estruturas.h"
+#include "ArrayDinamico.h"
+#include "TabelaHash.h"
 
 #define TRUE 1
 #define FALSE 0
-#define ANO_I 1936 			// GET MAX ANO DO PC 	<----------------------------------------------------------########
-#define N_AUTOR 100			// GET MAX ANO DO PC 	<----------------------------------------------------------########
-#define MAXDIM 80           // GET MAX ANO DO PC 	<----------------------------------------------------------########
-#define N_AUTORES 200 		// GET SOME DIMMENSION 	<----------------------------------------------------------########
-#define MAX_DATAS 40
 //////////////////////////////////////////////////////////////////////////////////////////
 #define DEBUG_MODE FALSE            //  Modo debug TRUE / FALSE                         //
 #define PATH_MODE TRUE              //  Modo de caminho especificado TRUE / FALSE       //
@@ -38,97 +30,6 @@ typedef struct sList
     int nArt;               // numero de Artigos.
     struct sList * seg;     // Nodo seguinte
 }ANAutores;
-
-
-typedef struct sAno
-{   int totArtigos;           // Serve para saber quantos artigos existem para este ano, e se existe algum artigo.
-    ANAutores * array;              // Estrutura que guarda o nº de autores
-}Ano;
-
-typedef struct sAnos
-{   int maxDimAno;          // Dimensao maxima do array
-    int currentDIM;         // Dimensao atual do array
-    Ano ano[MAXDIM];        // Array de celulas ano
-} Anos;
-
-// Declaracao da estrutura de dados
-static Anos estrutura;
-
-
-int initEstrutura()
-{int i=0;
-    estrutura.maxDimAno=MAXDIM;
-    for(i=0;i<(MAXDIM);i++)
-    {   estrutura.ano[i].totArtigos = 0;
-        estrutura.ano[i].list = NULL;
-    }
-        
-    return 0;
-}
-
-
-int addnArt(int ano, int nAutor)
-{   // Calcula o ano no array
-    ano = (ano-ANO_I+1);
-    
-    // Adiciona ao numero total
-    addList(estrutura.ano[0].list, nAutor, 1);
-    estrutura.ano[0].totArtigos++;
-
-    // Adiciona ao ano em questao
-    addList(estrutura.ano[ano].list, nAutor, 1);
-    estrutura.ano[ano].totArtigos++;
-    
-    return 0;
-}
-
-
-
-
-int addList(List * l, int aut, int art)
-{ int ret = TRUE;
-  
-    Nodo n = (Nodo) malloc(sizeof(List));
-    n->nAut = aut;
-    n->nArt = art;
-    n->seg  = NULL;
-    if (!n) {return FALSE;}
-    
-    if (l)
-    {   // Avanca ate a posicao de insercao
-        while (l!=NULL && l->nAut < aut)
-        { l = l->seg; }
-        
-        // verifica se ja existe a posicao e insere
-        if(!l)
-        { l->nArt+=art;
-        }
-        else if (l->nAut==aut)
-            {   l->nArt += art; }
-        else
-        {   l->seg = n; }
-    }
-    else    // Se não tem lista cria um nodo e adiciona
-    { l->seg = n; }
-    
-    return ret;
-}
-
-int getList(List * l, int aut)
-{int art=-1;
-    
-    if (l)
-    {
-        while (l && l->nAut<aut)
-        {l=l->seg;}
-        if (l->nAut == aut)
-        {art = l->nArt;}
-    }
-    
-    
-    return art;
-}
-
 
 
 int imprimeG(int bool, char * line)
