@@ -147,14 +147,14 @@ int imprimeG(int bool, char * line)
     }
     //////////////////////////////////////////////////////////////////////
     ////// IMPRIME ANO[0]   //////////////////////////////////////////////
-    //
-    l = estrutura.ano[0].list;                                      //
-    if (l)                                                          //
-    {   while (l)                                                   //
-    {   printf("#Autores:%d\n#Artigos:%d\n",l->nAut, l->nArt);  //
-        if (l->seg) {l=l->seg;}                                 //
-    }                                                           //
-    }                                                               //
+                                                                        //
+    l = estrutura.ano[0].list;                                          //
+    if (l)                                                              //
+    {   while (l)                                                       //
+    {   printf("#Autores:%d\n#Artigos:%d\n",l->nAut, l->nArt);          //
+        if (l->seg) {l=l->seg;}                                         //
+    }                                                                   //
+    }                                                                   //
     //////////////////////////////////////////////////////////////////////
     if (g && d3 && d4)
     {

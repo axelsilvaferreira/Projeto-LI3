@@ -37,16 +37,17 @@ typedef struct sList
 {   int nAut;               // numero de Autores.
     int nArt;               // numero de Artigos.
     struct sList * seg;     // Nodo seguinte
-}List, * Nodo;
+}ANAutores;
 
 
 typedef struct sAno
 {   int totArtigos;           // Serve para saber quantos artigos existem para este ano, e se existe algum artigo.
-    List * list;              // Estrutura que guarda o nº de autores
+    ANAutores * array;              // Estrutura que guarda o nº de autores
 }Ano;
 
 typedef struct sAnos
-{   int maxDimAno;             // Dimensao maxima do array dos anos
+{   int maxDimAno;          // Dimensao maxima do array
+    int currentDIM;         // Dimensao atual do array
     Ano ano[MAXDIM];        // Array de celulas ano
 } Anos;
 
