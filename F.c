@@ -26,12 +26,6 @@
 #define PATH_MODE TRUE              //  Modo de caminho especificado TRUE / FALSE       //
 //////////////////////////////////////////////////////////////////////////////////////////
 
-static char * G_PATH    = "/Users/axelferreira/Desktop/dir/G.txt";          // Nome do ficheiro G.csv            //
-static char * G_NAME    = "G.csv";                                                                               //
-static char * DATA3_P   = "/Users/axelferreira/Desktop/dir/datas3.txt";
-static char * DATA4_P   = "/Users/axelferreira/Desktop/dir/datas4.txt";
-static char * DATA3     = "datas3.txt";
-static char * DATA4     = "datas4.txt";
 
 typedef struct sList
 {   int nAut;               // numero de Autores.
@@ -130,21 +124,17 @@ int getList(List * l, int aut)
 
 
 
-int imprimeG(int bool, char * line)
+int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
 { int ret=FALSE, i=0, anoI=-1, anoF=-1, p1=0, p2=0;
     char * buffer = malloc(MAX_DATAS*sizeof(char));
     char * token=NULL, *tofree = buffer;
     List * l = NULL;
     FILE * g=NULL, * d3=NULL, * d4=NULL;
-    // escolhe o modo Path
-    if (PATH_MODE==TRUE) {  g  = fopen(G_PATH, "w");
-        d3 = fopen(DATA3_P, "r");
-        d4 = fopen(DATA4_P, "r");
-    }
-    else {  g  = fopen(G_NAME, "w");
-        d3 = fopen(DATA3, "r");
-        d4 = fopen(DATA4, "r");
-    }
+    
+    g  = fopen(G_PATH, "w");
+    d3 = fopen(DATA3_P, "r");
+    d4 = fopen(DATA4_P, "r");
+    
     //////////////////////////////////////////////////////////////////////
     ////// IMPRIME ANO[0]   //////////////////////////////////////////////
                                                                         //

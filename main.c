@@ -14,7 +14,8 @@
 #include "fread.h"
 #include "fwrite.h"
 #include "parser.h"
-#include "est_fase2.h"
+#include "F.h"
+//#include "est_fase2.h"
 
 // Macros
 #define TRUE 1
@@ -22,7 +23,7 @@
 #define INIT_BUFFER_SIZE 500
 #define FILE_NAME_BUFFER 50
 
-#define DEBUG_MODE FALSE                    // <-----<<<  Toogle 1/0 to switch DEBUG_MODE ON/OFF
+#define DEBUG_MODE FALSE                   // <-----<<<  Toogle 1/0 to switch DEBUG_MODE ON/OFF
 #define PATH_MODE TRUE                     // <-----<<<  Comment to switch PATH_MODE OFF
 #define PATH_MOD
 #ifdef PATH_MOD
@@ -98,7 +99,7 @@ int leFicheiro(char * bufferList)
 
 
 int main(int argc, const char * argv[])
-{   int i, bool = TRUE, indexL = -1;
+{   int i, boolE = TRUE, boolG = TRUE, indexL = -1;
     char * bufferList;
 	int buffer_size = FILE_NAME_BUFFER * sizeof(char);
 	int rc = TRUE;
@@ -136,8 +137,8 @@ int main(int argc, const char * argv[])
             lRej = leFicheiro(bufferList);
             nRej+=lRej;
             // Imprime o nome do ficheiro e o numero de Rejeitados.
-            imprimeE(bool,lRej,bufferList, E_FILE);
-            bool = FALSE;
+            imprimeE(boolE,lRej,bufferList, E_FILE);
+            boolE = FALSE;
         }
     }
 	free(bufferList);
@@ -145,8 +146,8 @@ int main(int argc, const char * argv[])
     imprimeD(nRej, nJou, nCon, D_FILE);
     
     // Imprime o ficheiro G.csv
-    
-    
+    imprimeG(boolG);
+    boolG = FALSE;
     closeFile(indexL); 
     
     return 0;
