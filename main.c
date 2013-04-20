@@ -30,13 +30,17 @@
 #define L_FILE "/Users/axelferreira/Desktop/dir/lista.txt"
 #define D_FILE "/Users/axelferreira/Desktop/dir/D.txt"
 #define E_FILE "/Users/axelferreira/Desktop/dir/E.txt"
-#define G_FILE "/Users/axelferreira/Desktop/dir/G.txt"
+#define G_FILE "/Users/axelferreira/Desktop/dir/G.csv"
+#define D3_FILE "/Users/axelferreira/Desktop/dir/data3.txt"
+#define D4_FILE "/Users/axelferreira/Desktop/dir/data4.txt"
 #define _PATH_ "/Users/axelferreira/Desktop/dir/"
 #else
 #define L_FILE "lista.txt"
 #define D_FILE "D.txt"
 #define E_FILE "E.txt"
-#define G_FILE "G.txt"
+#define G_FILE "G.csv"
+#define D4_FILE "data3.txt"
+#define D3_FILE "data4.txt"
 #define _PATH_ "./"
 #endif
 
@@ -51,7 +55,8 @@ int leFicheiro(char * bufferList)
 {   int indexC_J = -1, ret=TRUE, lRej=0, bLine_size = (INIT_BUFFER_SIZE * sizeof(char));
     char * bufferLine=NULL;
     char * s = malloc(100 * sizeof(char));
-    
+
+     
     if (PATH_MODE)
     {   strcpy(s, _PATH_);
         strcpy(&s[32], bufferList);
@@ -75,17 +80,16 @@ int leFicheiro(char * bufferList)
             // Valida a linha
             entrada = parseLine(bufferLine, type);
             if (entrada.nomes)      
-            {   if (type=='c')      // Caso seja Conf
-                {   nCon++;
-                    // Adiciona dados a estrutura dos contadores
-                    
-                    // Adiciona dados a estrutura dos Autores
-                }
+            {   // Adiciona dados a estrutura dos contadores
+                addnArt(entrada.ano, entrada.nAutores);
+                
+                // Adiciona dados a estrutura dos Autores
+                //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+            
+                if (type=='c')      // Caso seja Conf
+                {   nCon++; }
                 else                // Caso seja Revista
-                {   nJou++;
-                    // Adiciona dados a estrutura dos contadores
-                    // Adiciona dados a estrutura dos Autores
-                }
+                {   nJou++; }
             }
             else                    // Caso não seja válida
             { lRej++; }
@@ -103,10 +107,9 @@ int main(int argc, const char * argv[])
     char * bufferList;
 	int buffer_size = FILE_NAME_BUFFER * sizeof(char);
 	int rc = TRUE;
-
-    char * s = strdup("191	   	Ron Aharoni: A principle of symmetry in networks. Discrete Mathematics (DM) 44(1):1-11 (1983)");
-    parseLine(s, 'j');
     
+    // inicializa a estrutura F
+    initEstrutura();
     
     // Inicializa o controlo & Abre o ficheiro lista.txt && Alloca o buffer
     init_file_control();                        // Inicializa o controlo de ficheiros
@@ -146,7 +149,7 @@ int main(int argc, const char * argv[])
     imprimeD(nRej, nJou, nCon, D_FILE);
     
     // Imprime o ficheiro G.csv
-    imprimeG(boolG);
+    imprimeG(boolG,G_FILE,D3_FILE,D4_FILE);
     boolG = FALSE;
     closeFile(indexL); 
     

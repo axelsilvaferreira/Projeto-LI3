@@ -1,6 +1,6 @@
 CC 		= gcc
 CFLAGS	= -Wall -Wextra -O2 #-pedantic -g
-OBJS 	= main.o fread.o fwrite.o parser.o est_fase2.o ArrayDinamico.o TabelaHash.o
+OBJS 	= main.o fread.o fwrite.o parser.o F.o
 
 
 PARSER_LI3: $(OBJS)
@@ -18,12 +18,14 @@ fwrite.o: fwrite.h fwrite.h
 parser.o: parser.h parser.c
 	$(CC) $(CFLAGS) -c parser.c
 
-est_fase2.o: est_fase2.h est_fase2.c
-	$(CC) $(CFLAGS) -c est_fase2.c
+F.o: F.h F.c
+	$(CC) $(CFLAGS) -c F.c
+#est_fase2.o: est_fase2.h est_fase2.c
+#	$(CC) $(CFLAGS) -c est_fase2.c
 
-ArrayDinamico.o: ArrayDinamico.h
+#ArrayDinamico.o: ArrayDinamico.h
 
-TabelaHash.o: TabelaHash.h
+#TabelaHash.o: TabelaHash.h
 
 all:
 	make PARSER_LI3

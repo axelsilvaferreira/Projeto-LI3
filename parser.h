@@ -12,6 +12,7 @@
 
 typedef struct sStats
 {   char * nomes;                   // buffer com os autores
+    int nAutores;                   // Numero de autores
     int ano;                        // Ano
 }Stats;
 

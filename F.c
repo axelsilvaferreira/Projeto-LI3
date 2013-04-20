@@ -17,10 +17,9 @@
 #define TRUE 1
 #define FALSE 0
 #define ANO_I 1936 			// GET MAX ANO DO PC 	<----------------------------------------------------------########
-#define N_AUTOR 100			// GET MAX ANO DO PC 	<----------------------------------------------------------########
-#define MAXDIM 80           // GET MAX ANO DO PC 	<----------------------------------------------------------########
-#define N_AUTORES 200 		// GET SOME DIMMENSION 	<----------------------------------------------------------########
-#define MAX_DATAS 40
+//#define N_AUTOR 100			// GET MAX ANO DO PC 	<----------------------------------------------------------########
+//#define N_AUTORES 200 		// GET SOME DIMMENSION 	<----------------------------------------------------------########
+#define MAX_DATAS 40        // Get MAX CHAR DATAS3/4
 //////////////////////////////////////////////////////////////////////////////////////////
 #define DEBUG_MODE FALSE            //  Modo debug TRUE / FALSE                         //
 #define PATH_MODE TRUE              //  Modo de caminho especificado TRUE / FALSE       //
@@ -28,20 +27,20 @@
 
 
 typedef struct sList
-{   int nAut;               // numero de Autores.
-    int nArt;               // numero de Artigos.
-    struct sList * seg;     // Nodo seguinte
+{   int nAut;                   // numero de Autores.
+    int nArt;                   // numero de Artigos.
+    struct sList * seg;         // Nodo seguinte
 }List, * Nodo;
 
 
 typedef struct sAno
-{   int totArtigos;           // Serve para saber quantos artigos existem para este ano, e se existe algum artigo.
-    List * list;              // Estrutura que guarda o nº de autores
+{   int totArtigos;             // Serve para saber quantos artigos existem para este ano, e se existe algum artigo.
+    List * list;                // Estrutura que guarda o nº de autores
 }Ano;
 
 typedef struct sAnos
-{   int maxDimAno;             // Dimensao maxima do array dos anos
-    Ano ano[MAXDIM];        // Array de celulas ano
+{   int maxDimAno;              // Dimensao maxima do array dos anos
+    Ano ano[MAXDIM];            // Array de celulas ano
 } Anos;
 
 // Declaracao da estrutura de dados
@@ -55,54 +54,57 @@ int initEstrutura()
     {   estrutura.ano[i].totArtigos = 0;
         estrutura.ano[i].list = NULL;
     }
-        
     return 0;
 }
 
 
 int addnArt(int ano, int nAutor)
-{   // Calcula o ano no array
-    ano = (ano-ANO_I+1);
+{ List * l0 = estrutura.ano[0].list, * l = estrutura.ano[ano].list;
     
-    // Adiciona ao numero total
-    addList(estrutura.ano[0].list, nAutor, 1);
-    estrutura.ano[0].totArtigos++;
+    // Calcula o ano no array
+    ano = (ano-ANO_I+1); //'+1' pq 0 está rezervado
 
-    // Adiciona ao ano em questao
-    addList(estrutura.ano[ano].list, nAutor, 1);
-    estrutura.ano[ano].totArtigos++;
+    // Verifica se o ano cabe no array
+    if (ano <= MAXDIM)
+    {   // Adiciona ao numero total
+        if (DEBUG_MODE){printf("tot:%d\n", estrutura.ano[ano].totArtigos);}
+        l0 = addList(l0, nAutor, 1);
+        estrutura.ano[0].totArtigos++;
+        if (DEBUG_MODE){printf("adicionou:\nano:%d nAutor:%d\n",(ano+1936-1),nAutor);}
+        // Adiciona ao ano em questao
+        l = addList(l, nAutor, 1);
+        estrutura.ano[ano].totArtigos++;
+        if (DEBUG_MODE){printf("entrou:\ntot:%d\n\n", estrutura.ano[ano].totArtigos);}
+    }
     
     return 0;
 }
 
-
-
-
-int addList(List * l, int aut, int art)
+List * addList(List ** l, int aut, int art)
 { int ret = TRUE;
   
     Nodo n = (Nodo) malloc(sizeof(List));
+    if (!n) {return FALSE;}
     n->nAut = aut;
     n->nArt = art;
     n->seg  = NULL;
-    if (!n) {return FALSE;}
-    
-    if (l)
+        
+    if (*l)
     {   // Avanca ate a posicao de insercao
-        while (l!=NULL && l->nAut < aut)
-        { l = l->seg; }
+        while ((*l)!=NULL && (*l)->nAut < aut)
+        { (*l) = (*l)->seg; }
         
         // verifica se ja existe a posicao e insere
-        if(!l)
-        { l->nArt+=art;
+        if(!(*l))
+        { (*l)->nArt+=art;
         }
-        else if (l->nAut==aut)
-            {   l->nArt += art; }
+        else if ((*l)->nAut==aut)
+            {   (*l)->nArt += art; }
         else
-        {   l->seg = n; }
+        {   (*l)->seg = n; }
     }
     else    // Se não tem lista cria um nodo e adiciona
-    { l->seg = n; }
+    { (*l) = n; }
     
     return ret;
 }
@@ -119,7 +121,7 @@ int getList(List * l, int aut)
     }
     
     
-    return art;
+    return n;
 }
 
 
@@ -130,20 +132,22 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
     char * token=NULL, *tofree = buffer;
     List * l = NULL;
     FILE * g=NULL, * d3=NULL, * d4=NULL;
-    
-    g  = fopen(G_PATH, "w");
+    // Open files data3 data4 and G.csv
+    if (bool) {g  = fopen(G_PATH, "w");}
+    else {g  = fopen(G_PATH, "a");}
     d3 = fopen(DATA3_P, "r");
     d4 = fopen(DATA4_P, "r");
     
+    printf("Chegou a imprimeG()\n");
     //////////////////////////////////////////////////////////////////////
     ////// IMPRIME ANO[0]   //////////////////////////////////////////////
                                                                         //
     l = estrutura.ano[0].list;                                          //
     if (l)                                                              //
     {   while (l)                                                       //
-    {   printf("#Autores:%d\n#Artigos:%d\n",l->nAut, l->nArt);          //
-        if (l->seg) {l=l->seg;}                                         //
-    }                                                                   //
+        {   printf("#Autores:%d\n#Artigos:%d\n",l->nAut, l->nArt);      //
+            l=l->seg;                                                   //
+        }                                                               //
     }                                                                   //
     //////////////////////////////////////////////////////////////////////
     if (g && d3 && d4)

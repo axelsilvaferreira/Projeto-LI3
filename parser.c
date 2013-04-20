@@ -25,12 +25,12 @@ static int minPag = 0;              //  numero de Pag minimo para artigos
 
 
 Stats parseLine(char * buffer, char t)
-{   int flag = TRUE, ano=0;
+{   int flag = TRUE;
     char * autores=NULL, * token=NULL;
     Stats s;
     s.nomes=NULL;
     s.ano=FALSE;
-    
+    s.nAutores=0;
 
     /////////   P  A  R  S  E  R   ////////////
     if (DEBUG_MODE) {printf("_______________________________________________\n");}
@@ -102,8 +102,8 @@ Stats parseLine(char * buffer, char t)
     else if (t == 'c')      /////////// ( C O N F E R E N C E ) ///////////
     {   // Valida Nome da Conferencia
         token = strsep(&buffer, ":");
-        ano = validaNomeConfData(token);
-        if (!ano || !buffer) {return s;}
+        s.ano = validaNomeConfData(token);
+        if (!s.ano || !buffer) {return s;}
         if (DEBUG_MODE) {printf("%dC Nome Data:%s#\n",flag,token);}
         
         // Valida Paginas da Conferencia
@@ -114,8 +114,11 @@ Stats parseLine(char * buffer, char t)
     
     ///////////  Valida  Autores  ///////////
     if (!flag) { return s; }
-    else {  // Copia os autores para a estrutura a devolver
+    else {  int i=0;
+            // Copia os autores para a estrutura a devolver
             s.nomes = strdup(autores);
+            for (i=1;strsep(&autores, ",");i++) {}
+            s.nAutores = i;
          }
     
     
@@ -136,6 +139,7 @@ void setMinPag(int pag)
 //#####################|__|####|__/#####|__________/###/__/###\__/###############\\
 //###############################################################################\\
 //-------------------------------------------------------------------------------\\
+
 
 int validaNumeroR(char * token)
 { int i=0, flag = TRUE, flag2 = TRUE;
@@ -293,3 +297,6 @@ char * trim(char * token)
     
     return token;
 }
+
+
+

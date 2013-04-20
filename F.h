@@ -10,6 +10,7 @@
 #define LI3_F_h
 
 
+#define MAXDIM 100   // Numero máximo de anos
 
 
 
@@ -21,7 +22,7 @@ int addnArt();
 int addList();
 
 /**
- * Retruns a 
+ * Retruns a Linked List 
  *
  *
  *
