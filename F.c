@@ -26,16 +26,12 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-typedef struct sList
-{   int nAut;                   // numero de Autores.
-    int nArt;                   // numero de Artigos.
-    struct sList * seg;         // Nodo seguinte
-}List, * Nodo;
+
 
 
 typedef struct sAno
 {   int totArtigos;             // Serve para saber quantos artigos existem para este ano, e se existe algum artigo.
-    List * list;                // Estrutura que guarda o nº de autores
+    struct sList * list;                // Estrutura que guarda o nº de autores
 }Ano;
 
 typedef struct sAnos
@@ -59,57 +55,41 @@ int initEstrutura()
 
 
 int addnArt(int ano, int nAutor)
-{ List * l0 = estrutura.ano[0].list, * l = estrutura.ano[ano].list;
-    
-    // Calcula o ano no array
+{   // Calcula o ano no array
     ano = (ano-ANO_I+1); //'+1' pq 0 está rezervado
-
+    
     // Verifica se o ano cabe no array
     if (ano <= MAXDIM)
     {   // Adiciona ao numero total
-        if (DEBUG_MODE){printf("tot:%d\n", estrutura.ano[ano].totArtigos);}
-        l0 = addList(l0, nAutor, 1);
+        estrutura.ano[0].list =(struct sList *) addList(&estrutura.ano[0].list, nAutor, 1);
         estrutura.ano[0].totArtigos++;
-        if (DEBUG_MODE){printf("adicionou:\nano:%d nAutor:%d\n",(ano+1936-1),nAutor);}
         // Adiciona ao ano em questao
-        l = addList(l, nAutor, 1);
+        estrutura.ano[ano].list =(struct sList *) addList(estrutura.ano[ano].list, nAutor, 1);
         estrutura.ano[ano].totArtigos++;
-        if (DEBUG_MODE){printf("entrou:\ntot:%d\n\n", estrutura.ano[ano].totArtigos);}
     }
     
     return 0;
 }
 
-List * addList(List ** l, int aut, int art)
-{ int ret = TRUE;
-  
-    Nodo n = (Nodo) malloc(sizeof(List));
-    if (!n) {return FALSE;}
-    n->nAut = aut;
-    n->nArt = art;
-    n->seg  = NULL;
-        
-    if (*l)
-    {   // Avanca ate a posicao de insercao
-        while ((*l)!=NULL && (*l)->nAut < aut)
-        { (*l) = (*l)->seg; }
-        
-        // verifica se ja existe a posicao e insere
-        if(!(*l))
-        { (*l)->nArt+=art;
-        }
-        else if ((*l)->nAut==aut)
-            {   (*l)->nArt += art; }
-        else
-        {   (*l)->seg = n; }
-    }
-    else    // Se não tem lista cria um nodo e adiciona
-    { (*l) = n; }
+struct sList * addList(struct sList * l, int aut, int art)
+{ struct sList * n;
     
-    return ret;
+        
+    if (!l || l->nAut < aut)
+    {
+        n = (struct sList *) malloc(sizeof(struct sList));
+        if (!n) {return FALSE;}
+        n->nAut = aut;
+        n->nArt = art;
+        n->seg  = l;
+    }
+    else {l->seg = addList(l->seg, aut, art);}
+    
+    
+    return l;
 }
 
-int getList(List * l, int aut)
+int getList(struct sList * l, int aut)
 {int art=-1;
     
     if (l)
@@ -121,7 +101,7 @@ int getList(List * l, int aut)
     }
     
     
-    return n;
+    return art;
 }
 
 
@@ -130,7 +110,7 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
 { int ret=FALSE, i=0, anoI=-1, anoF=-1, p1=0, p2=0;
     char * buffer = malloc(MAX_DATAS*sizeof(char));
     char * token=NULL, *tofree = buffer;
-    List * l = NULL;
+    struct sList * l = NULL;
     FILE * g=NULL, * d3=NULL, * d4=NULL;
     // Open files data3 data4 and G.csv
     if (bool) {g  = fopen(G_PATH, "w");}
@@ -138,12 +118,11 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
     d3 = fopen(DATA3_P, "r");
     d4 = fopen(DATA4_P, "r");
     
-    printf("Chegou a imprimeG()\n");
+    
     //////////////////////////////////////////////////////////////////////
     ////// IMPRIME ANO[0]   //////////////////////////////////////////////
-                                                                        //
-    l = estrutura.ano[0].list;                                          //
-    if (l)                                                              //
+    struct sList * lista = estrutura.ano[0].list;
+    if (lista)                                                              //
     {   while (l)                                                       //
         {   printf("#Autores:%d\n#Artigos:%d\n",l->nAut, l->nArt);      //
             l=l->seg;                                                   //
@@ -160,7 +139,7 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
             {   while (l)
             {   anoI = l->nAut;
                 anoF = l->nArt;
-                printf("\"%d\",\"%d\",\"%d\"\n",(i+ANO_I-1), anoI, anoF);
+                if (DEBUG_MODE){printf("\"%d\",\"%d\",\"%d\"\n",(i+ANO_I-1), anoI, anoF);}
                 fprintf(g,"\"%d\",\"%d\",\"%d\"\n",(i+ANO_I-1), (l->nAut), (l->nArt));
                 l=l->seg;
             }

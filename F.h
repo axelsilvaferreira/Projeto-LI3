@@ -12,6 +12,12 @@
 
 #define MAXDIM 100   // Numero máximo de anos
 
+struct sList
+{   int nAut;                   // numero de Autores.
+    int nArt;                   // numero de Artigos.
+    struct sList * seg;         // Nodo seguinte
+};
+
 
 
 
@@ -19,7 +25,7 @@ int initEstrutura();
 
 int addnArt();
 
-int addList();
+struct sList * addList();
 
 /**
  * Retruns a Linked List 
