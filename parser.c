@@ -117,7 +117,7 @@ Stats parseLine(char * buffer, char t)
     else {  int i=0;
             // Copia os autores para a estrutura a devolver
             s.nomes = strdup(autores);
-            for (i=1;strsep(&autores, ",");i++) {}
+            for (i=0;strsep(&autores, ",");i++) {}
             s.nAutores = i;
          }
     
