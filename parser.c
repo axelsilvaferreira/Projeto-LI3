@@ -25,7 +25,7 @@ static int minPag = 0;              //  numero de Pag minimo para artigos
 
 
 Stats parseLine(char * buffer, char t)
-{   int flag = TRUE;
+{   int flag = TRUE, i=0;
     char * autores=NULL, * token=NULL;
     Stats s;
     s.nomes=NULL;
@@ -95,14 +95,16 @@ Stats parseLine(char * buffer, char t)
         
         // Valida Ano da Revista
         token = strsep(&buffer, ")");
-        s.ano = validaAno(token);
-        if (!s.ano) {return s;}
+        i = validaAno(token);
+        if (i > 1000) {s.ano =i;}
+        if (!(s.ano)) {return s;}
         if (DEBUG_MODE) {printf("%dJ Ano    :%s#\n",flag,token);}
     }
     else if (t == 'c')      /////////// ( C O N F E R E N C E ) ///////////
     {   // Valida Nome da Conferencia
         token = strsep(&buffer, ":");
-        s.ano = validaNomeConfData(token);
+        i = validaNomeConfData(token);
+        if (i > 1000) {s.ano = i;}
         if (!s.ano || !buffer) {return s;}
         if (DEBUG_MODE) {printf("%dC Nome Data:%s#\n",flag,token);}
         
