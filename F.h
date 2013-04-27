@@ -10,7 +10,7 @@
 #define LI3_F_h
 
 
-#define MAXDIM 100   // Numero máximo de anos
+#define MAXDIM 1301   // Numero máximo de anos
 
 struct sList
 {   //int ano;                    // ano de publicacao.

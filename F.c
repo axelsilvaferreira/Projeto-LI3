@@ -16,9 +16,9 @@
 
 #define TRUE 1
 #define FALSE 0
-#define ANO_I 1936          // GET MAX ANO DO PC 	<----------------------------------------------------------########
+#define ANO_I 0001          // GET MAX ANO DO PC 	<----------------------------------------------------------########
 #define MAX_DATAS 40        // Get MAX CHAR DATAS3/4
-#define MAX_LIST 100
+#define MAX_LIST 3001
 //////////////////////////////////////////////////////////////////////////////////////////
 #define DEBUG_MODE FALSE            //  Modo debug TRUE / FALSE                         //
 #define PATH_MODE TRUE              //  Modo de caminho especificado TRUE / FALSE       //
@@ -75,55 +75,12 @@ int addnArt(int ano, int nAutor)
 }
 
 
-struct sList * addListit(struct sList * l, int aut, int art)
-{struct sList * l2 = l, *ant=NULL;
-   
-    // Quando nao ha lista
-    if (!l)
-    {   struct sList * n = (struct sList *) malloc(sizeof(struct sList));
-        n->nArt = art;
-        n->nAut = aut;
-        n->seg  = NULL;
-        return n;
-    }
-    
-    // Avanca ate a posicao de insercao
-    if (l)
-    {   ant = l;
-        while (l->nAut < aut && l->seg)
-        {   ant = l;
-            l=l->seg;
-        }
-    }
-    // Quando a lista chega ao fim
-    if (!(l->seg))
-    { struct sList * n = (struct sList *) malloc(sizeof(struct sList));
-        n->nArt = art;
-        n->nAut = aut;
-        n->seg  = NULL;
-        l->seg  = n;
-    }
-    
-    // Quando insere no meio e já existe
-    else if (l->nAut == aut)
-    { l->nArt += 1; }
-    
-    //Quando insere no meio e ainda nao existe
-    else if (l->nAut > aut)
-    {struct sList * n = (struct sList *) malloc(sizeof(struct sList));
-        n->nArt  = art;
-        n->nAut  = aut;
-        n->seg   = l;
-        ant->seg = n;
-    }
-    
-    return l2;
-}
 
 //######################## RECURSIVA #############################
 struct sList * addList(struct sList * l, int aut, int art)
-{ struct sList * n;
+{ struct sList * n = NULL;
     
+    // Insercao no fim ou quando nao ha lista.
     if (!l)
     { n = (struct sList *) malloc(sizeof(struct sList));
         n->nArt  = art;
@@ -131,23 +88,29 @@ struct sList * addList(struct sList * l, int aut, int art)
         n->seg   = NULL;
         return n;
     }
+    // Incremento quando o nodo ja existe
     else if (l->nAut == aut)
     { l->nArt++;
         return l;
     }
+    // Chamada recusriva
     else if (l->nAut < aut)
     {   l->seg = addList(l->seg,aut,art);
         return l;
     }
-    else
+    // Quando o nodo não existe
+    else if (l->nAut > aut)
     { n = (struct sList *) malloc(sizeof(struct sList));
         n->nArt  = art;
         n->nAut  = aut;
         n->seg   = l->seg;
         return n;
     }
-    
+    return n;
 }
+
+
+
 
 int getList(struct sList * l, int aut)
 {int art=-1;
@@ -179,7 +142,8 @@ void printaStruct()
 }
 
 int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
-{ int ret=FALSE, i=0, anoI=-1, anoF=-1, p1=0, p2=0, tot=0;
+{ int ret=FALSE, i=0, anoI=-1, anoF=-1, tot=0;
+    float p1=0;
     char * buffer = malloc(MAX_DATAS*sizeof(char));
     char * token=NULL, *tofree = buffer;
     struct sList * l = NULL;
@@ -197,7 +161,7 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
         fprintf(g, "\"ano\",\"#autores\",\"#artigos\"\n");
         for (i=1;i<(MAX_LIST-1);i++)     // i=1 pq o array[0] tem os totais
         {   l = estrutura[i];
-            if (l && ((l->nArt) > 0))
+            if (l)
             {   while (l)
                 {   anoI = l->nAut;
                     anoF = l->nArt;
@@ -211,14 +175,11 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
         
         // imprime #AUTORES, #ARTIGOS
         fprintf(g, "\"#autores\",\"#artigos\"\n");
-        l = estrutura[0];
+        l = estrutura[0]->seg;
         if (l)
         {   while (l)
-            {   if ((l->nArt) > 0)
-                    {
-                        fprintf(g, "\"%d\",\"%d\"\n", (l->nAut), (l->nArt));
-                        l=l->seg;
-                    }
+            {   fprintf(g, "\"%d\",\"%d\"\n", (l->nAut), (l->nArt));
+                l=l->seg;
             }
         }
         
@@ -231,11 +192,11 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
             for (i=anoI;i<=anoF;i++)
             {   l = estrutura[i];
                 if (l)
-                {   tot = l->nArt;
-                    l=l->seg;
+                {   tot += l->nArt;
                 }
             }
             fprintf(g, "\"%d-%d\",\"%d\"\n", anoI, anoF,tot);
+            tot=0;
         }
         
         // imprime ANO, #AUTORES, Precentagem
@@ -246,14 +207,14 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
             anoF = (anoI-ANO_I+1);
             l = estrutura[anoF];
             tot = l->nArt;
-            if (l )//&& tot>0)
+            if (l)
             { // Avanca o contador total do ano
               l = l->seg;
                 while (l)
                 { if (l->nArt > 0)
-                    {   p1 = (l->nArt)/(tot);
-                        p2 = (l->nArt)%(tot);
-                        fprintf(g, "\"%d\",\"%d\",\"%d.%d\"\n", (anoI), (l->nAut), p1, p2);
+                    {   p1 =(float) (((l->nArt)*100))/(tot);
+                        //p2 = (l->nArt)%(tot);
+                        fprintf(g, "\"%d\",\"%d\",\"%.2f\"\n", (anoI), (l->nAut), p1);
                         l=l->seg;
                     }
                 }

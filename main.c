@@ -20,7 +20,7 @@
 // Macros
 #define TRUE 1
 #define FALSE 0
-#define INIT_BUFFER_SIZE 500
+#define INIT_BUFFER_SIZE 700
 #define FILE_NAME_BUFFER 50
 
 #define DEBUG_MODE FALSE                   // <-----<<<  Toogle 1/0 to switch DEBUG_MODE ON/OFF
@@ -80,7 +80,9 @@ int leFicheiro(char * bufferList)
             // Valida a linha
             entrada = parseLine(bufferLine, type);
             if (entrada.nomes)      
-            {   // Adiciona dados a estrutura dos contadores
+            {   if(DEBUG_MODE && entrada.ano<1930) {printf("Ano:%d\nFile:%s\nlinha:%s\n\n",entrada.ano, bufferList, bufferLine);}
+
+                // Adiciona dados a estrutura dos contadores
                 addnArt(entrada.ano, entrada.nAutores);
                 
                 // Adiciona dados a estrutura dos Autores
