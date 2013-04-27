@@ -147,8 +147,9 @@ int main(int argc, const char * argv[])
 	free(bufferList);
     // Imprime o ficheiro D
     imprimeD(nRej, nJou, nCon, D_FILE);
-    
+    //printaStruct();
     // Imprime o ficheiro G.csv
+//##################
     imprimeG(boolG,G_FILE,D3_FILE,D4_FILE);
     boolG = FALSE;
     closeFile(indexL); 
