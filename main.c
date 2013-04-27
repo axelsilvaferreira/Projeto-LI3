@@ -27,21 +27,21 @@
 #define PATH_MODE TRUE                     // <-----<<<  Comment to switch PATH_MODE OFF
 #define PATH_MOD
 #ifdef PATH_MOD
-#define L_FILE "/Users/axelferreira/Desktop/dir/lista.txt"
-#define D_FILE "/Users/axelferreira/Desktop/dir/D.txt"
-#define E_FILE "/Users/axelferreira/Desktop/dir/E.txt"
-#define G_FILE "/Users/axelferreira/Desktop/dir/G.csv"
-#define D3_FILE "/Users/axelferreira/Desktop/dir/data3.txt"
-#define D4_FILE "/Users/axelferreira/Desktop/dir/data4.txt"
-#define _PATH_ "/Users/axelferreira/Desktop/dir/"
+    #define L_FILE "/Users/axelferreira/Desktop/dir/lista.txt"
+    #define D_FILE "/Users/axelferreira/Desktop/dir/D.txt"
+    #define E_FILE "/Users/axelferreira/Desktop/dir/E.txt"
+    #define G_FILE "/Users/axelferreira/Desktop/dir/G.csv"
+    #define D3_FILE "/Users/axelferreira/Desktop/dir/datas3.txt"
+    #define D4_FILE "/Users/axelferreira/Desktop/dir/datas4.txt"
+    #define _PATH_ "/Users/axelferreira/Desktop/dir/"
 #else
-#define L_FILE "lista.txt"
-#define D_FILE "D.txt"
-#define E_FILE "E.txt"
-#define G_FILE "G.csv"
-#define D4_FILE "data3.txt"
-#define D3_FILE "data4.txt"
-#define _PATH_ "./"
+    #define L_FILE "lista.txt"
+    #define D_FILE "D.txt"
+    #define E_FILE "E.txt"
+    #define G_FILE "G.csv"
+    #define D4_FILE "datas3.txt"
+    #define D3_FILE "datas4.txt"
+    #define _PATH_ "./"
 #endif
 
 // Contadores do programa main
