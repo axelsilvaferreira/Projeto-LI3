@@ -25,10 +25,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
-
 // Declaracao da estrutura de dados
 static struct sList * estrutura[MAX_LIST];
 
@@ -46,10 +42,9 @@ int initEstrutura()
 {int i=0;
     for (i=0;i < MAX_LIST; i++)
     {   estrutura[i] = (struct sList *) malloc(sizeof(struct sList));
-        //estrutura[i]->ano = 0;
         estrutura[i]->nArt = 0;
         estrutura[i]->nAut = 0;
-        estrutura[i]->seg = NULL;
+        estrutura[i]->seg  = NULL;
     }
     
     return i;
@@ -80,75 +75,78 @@ int addnArt(int ano, int nAutor)
 }
 
 
-
-
-
-
 struct sList * addListit(struct sList * l, int aut, int art)
-{struct sList * l2 = l;
+{struct sList * l2 = l, *ant=NULL;
    
-    // Avanca ate a posicao de insercao
-    if (l) {while (l && l->nAut < aut) {l=l->seg;}}
-    
-    // Quando nao ha lista ou chega ao fim
+    // Quando nao ha lista
     if (!l)
+    {   struct sList * n = (struct sList *) malloc(sizeof(struct sList));
+        n->nArt = art;
+        n->nAut = aut;
+        n->seg  = NULL;
+        return n;
+    }
+    
+    // Avanca ate a posicao de insercao
+    if (l)
+    {   ant = l;
+        while (l->nAut < aut && l->seg)
+        {   ant = l;
+            l=l->seg;
+        }
+    }
+    // Quando a lista chega ao fim
+    if (!(l->seg))
     { struct sList * n = (struct sList *) malloc(sizeof(struct sList));
         n->nArt = art;
         n->nAut = aut;
         n->seg  = NULL;
-        l->seg = n;
+        l->seg  = n;
     }
     
-    // Quando insere no meio e já existe quando existe
-    if (l->nAut == aut)
+    // Quando insere no meio e já existe
+    else if (l->nAut == aut)
     { l->nArt += 1; }
     
-    //Quando insere no meio e ainda n nao existe
-    if (l->nAut > aut)
+    //Quando insere no meio e ainda nao existe
+    else if (l->nAut > aut)
     {struct sList * n = (struct sList *) malloc(sizeof(struct sList));
-        n->nArt = art;
-        n->nAut = aut;
-        n->seg  = NULL;
-        n->seg  = l->seg;
-        l->seg = n;
+        n->nArt  = art;
+        n->nAut  = aut;
+        n->seg   = l;
+        ant->seg = n;
     }
     
     return l2;
 }
 
+//######################## RECURSIVA #############################
 struct sList * addList(struct sList * l, int aut, int art)
 { struct sList * n;
     
-        
-    if (l && l->nAut <= aut)// (!l || l->nAut >= aut)
-    {l->seg = addList(l->seg, aut, art);}
-    else
-    {    // Quando insere no fim
-        if (!l)
-        {   n = (struct sList *) malloc(sizeof(struct sList));
-            if (!n) {return FALSE;}
-            n->nAut = aut;
-            n->nArt = art;
-            n->seg  = NULL;
-        }
-        // Quando a celula nao existe
-        if (l && l->nAut < aut)
-        {   n = (struct sList *) malloc(sizeof(struct sList));
-            if (!n) {return FALSE;}
-            n->nAut = aut;
-            n->nArt = art;
-            n->seg  = NULL;
-            n->seg  = l->seg;
-            l->seg  = n;
-        }
-        // Quando a celula já existe
-        if (l && l->nAut == aut) {l->nArt += 1;}
-        
+    if (!l)
+    { n = (struct sList *) malloc(sizeof(struct sList));
+        n->nArt  = art;
+        n->nAut  = aut;
+        n->seg   = NULL;
+        return n;
     }
-  //  else {l->seg = addList(l->seg, aut, art);}
+    else if (l->nAut == aut)
+    { l->nArt++;
+        return l;
+    }
+    else if (l->nAut < aut)
+    {   l->seg = addList(l->seg,aut,art);
+        return l;
+    }
+    else
+    { n = (struct sList *) malloc(sizeof(struct sList));
+        n->nArt  = art;
+        n->nAut  = aut;
+        n->seg   = l->seg;
+        return n;
+    }
     
-    
-    return l;
 }
 
 int getList(struct sList * l, int aut)
@@ -166,7 +164,19 @@ int getList(struct sList * l, int aut)
     return art;
 }
 
-
+void printaStruct()
+{int i;
+    struct sList * l=NULL;
+    
+    for (i=0;i<(MAX_LIST-1);i++)
+    {l = estrutura[i];
+        printf("Ano:%d",(i+ANO_I-1));
+        while(l)
+        {   printf("      Autor:%d Artigos:%d\n", l->nAut, l->nArt);
+            l=l->seg;
+        }
+    }
+}
 
 int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
 { int ret=FALSE, i=0, anoI=-1, anoF=-1, p1=0, p2=0, tot=0;
@@ -189,14 +199,12 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
         {   l = estrutura[i];
             if (l && ((l->nArt) > 0))
             {   while (l)
-                { //if (l->nArt>0)
-                    //{
-                        anoI = l->nAut;
-                        anoF = l->nArt;
-                        if (DEBUG_MODE){ printf("\"%d\",\"%d\",\"%d\"\n",(i+ANO_I-1), anoI, anoF);}
-                        fprintf(g,"\"%d\",\"%d\",\"%d\"\n",(i+ANO_I-1), (l->nAut), (l->nArt));
-                        l=l->seg;
-                   // }
+                {   anoI = l->nAut;
+                    anoF = l->nArt;
+                    if (DEBUG_MODE){ printf("\"%d\",\"%d\",\"%d\"\n",(i+ANO_I-1), anoI, anoF);}
+                    if (l->nAut > 0)
+                    {fprintf(g,"\"%d\",\"%d\",\"%d\"\n",(i+ANO_I-1), (l->nAut), (l->nArt));}
+                    l=l->seg;
                 }
             }
         }

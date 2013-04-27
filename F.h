@@ -38,6 +38,9 @@ struct sList * addList();
  */
 int getList();
 
+void printaStruct();
+
+
 /**
  * This function creates the file "G.csv" and it's content. If the file alreaddy exists it is rewritten.
  * @param bool if it's first time opens in "w" mode else in "a".
