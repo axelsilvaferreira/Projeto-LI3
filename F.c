@@ -52,7 +52,7 @@ int initEstrutura()
 
 
 int addnArt(int ano, int nAutor)
-{
+{int ret=FALSE;
     // Calcula o ano no array
     ano = (ano-ANO_I+1); //'+1' pq 0 está rezervado
     // Verifica se o ano cabe no array
@@ -69,9 +69,11 @@ int addnArt(int ano, int nAutor)
         // Adiciona a nAutores do ano correspondente
         estrutura[ano]->seg = addList(estrutura[ano]->seg, nAutor, 1);
         //printf("%d,%d,%d\n", (ano+ANO_I-1), s->nAut, s->nArt);
+
+        ret = TRUE;
     }
     
-    return 0;
+    return ret;
 }
 
 
@@ -131,9 +133,10 @@ void printaStruct()
 {int i;
     struct sList * l=NULL;
     
-    for (i=0;i<(MAX_LIST-1);i++)
+    for (i=1;i<(MAX_LIST-1);i++)
     {l = estrutura[i];
-        printf("Ano:%d",(i+ANO_I-1));
+        if (estrutura[i]->nArt > 0)
+        {printf("Ano:%d",(i+ANO_I-1));}
         while(l)
         {   printf("      Autor:%d Artigos:%d\n", l->nAut, l->nArt);
             l=l->seg;
@@ -141,7 +144,7 @@ void printaStruct()
     }
 }
 
-int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
+int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P, int screen)
 { int ret=FALSE, i=0, anoI=-1, anoF=-1, tot=0;
     float p1=0;
     char * buffer = malloc(MAX_DATAS*sizeof(char));
@@ -159,15 +162,17 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
     { 
         // imprime ANO, #AUTORES, #ARTIGOS
         fprintf(g, "\"ano\",\"#autores\",\"#artigos\"\n");
+        if (screen) {printf("ano, #autores, #artigos\n");}
         for (i=1;i<(MAX_LIST-1);i++)     // i=1 pq o array[0] tem os totais
         {   l = estrutura[i];
             if (l)
             {   while (l)
                 {   anoI = l->nAut;
                     anoF = l->nArt;
-                    if (DEBUG_MODE){ printf("\"%d\",\"%d\",\"%d\"\n",(i+ANO_I-1), anoI, anoF);}
                     if (l->nAut > 0)
-                    {fprintf(g,"\"%d\",\"%d\",\"%d\"\n",(i+ANO_I-1), (l->nAut), (l->nArt));}
+                    {   if (screen)
+                        { printf("%d, %d, %d\n",(i+ANO_I-1), anoI, anoF);}
+                        fprintf(g,"\"%d\",\"%d\",\"%d\"\n",(i+ANO_I-1), (l->nAut), (l->nArt));}
                     l=l->seg;
                 }
             }
@@ -175,16 +180,19 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
         
         // imprime #AUTORES, #ARTIGOS
         fprintf(g, "\"#autores\",\"#artigos\"\n");
+        if (screen){ printf("#autores, #artigos\n");}
         l = estrutura[0]->seg;
         if (l)
         {   while (l)
-            {   fprintf(g, "\"%d\",\"%d\"\n", (l->nAut), (l->nArt));
+            {   if (screen) {printf("%d, %d\n",(l->nAut), (l->nArt));}
+                fprintf(g, "\"%d\",\"%d\"\n", (l->nAut), (l->nArt));
                 l=l->seg;
             }
         }
         
         // imprime Intervalo-ANO, #ARTIGOS
         fprintf(g, "\"intervalo\",\"#artigos\"\n");
+        if (screen) {printf("intervalo, #artigos\n");}
         while (fgets(buffer, MAX_DATAS, d3))
         {   token = strsep(&buffer, "-");
             anoI = atoi(token);
@@ -196,11 +204,13 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
                 }
             }
             fprintf(g, "\"%d-%d\",\"%d\"\n", anoI, anoF,tot);
+            if (screen){ printf("%d-%d, %d\n", anoI, anoF,tot);}
             tot=0;
         }
         
         // imprime ANO, #AUTORES, Precentagem
         fprintf(g, "\"ano\",\"#autores\",\"percentagem\"\n");
+        if (screen){ printf("ano, #autores, percentagem\n");}
         tot = 0;
         while (fgets(buffer, 20, d4))
         {   anoI = atoi(buffer);
@@ -215,6 +225,7 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
                     {   p1 =(float) (((l->nArt)*100))/(tot);
                         //p2 = (l->nArt)%(tot);
                         fprintf(g, "\"%d\",\"%d\",\"%.2f\"\n", (anoI), (l->nAut), p1);
+                        if (screen){ printf("%d, %d, %.2f\n", (anoI), (l->nAut), p1);}
                         l=l->seg;
                     }
                 }

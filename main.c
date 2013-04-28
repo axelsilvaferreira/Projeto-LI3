@@ -149,10 +149,12 @@ int main(int argc, const char * argv[])
 	free(bufferList);
     // Imprime o ficheiro D
     imprimeD(nRej, nJou, nCon, D_FILE);
+    
+    // Imprime a estrutura para o ecrã
     //printaStruct();
+    
     // Imprime o ficheiro G.csv
-//##################
-    imprimeG(boolG,G_FILE,D3_FILE,D4_FILE);
+    imprimeG(boolG,G_FILE,D3_FILE,D4_FILE,TRUE); // TRUE imprime tb para o ecrã
     boolG = FALSE;
     closeFile(indexL); 
     
