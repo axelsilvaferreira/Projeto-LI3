@@ -221,7 +221,6 @@ int imprimeG(int bool, char * G_PATH, char * DATA3_P, char * DATA4_P)
             }
         }
         
-        
         ret = TRUE;
         fclose(d3);
         fclose(d4);
