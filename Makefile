@@ -6,7 +6,7 @@ OBJS 	= main.o fread.o fwrite.o parser.o F.o
 PARSER_LI3: $(OBJS)
 	$(CC) $(CFLAGS) -o PARSER_LI3 $(OBJS)
 
-main.o: main.c fread.c fwrite.c  #A.h A.c
+main.o: main.c fread.h fwrite.h parser.h F.h
 	$(CC) $(CFLAGS) -c main.c
 
 fread.o: fread.h fread.c
@@ -20,12 +20,7 @@ parser.o: parser.h parser.c
 
 F.o: F.h F.c
 	$(CC) $(CFLAGS) -c F.c
-#est_fase2.o: est_fase2.h est_fase2.c
-#	$(CC) $(CFLAGS) -c est_fase2.c
 
-#ArrayDinamico.o: ArrayDinamico.h
-
-#TabelaHash.o: TabelaHash.h
 
 all:
 	make PARSER_LI3
