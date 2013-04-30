@@ -28,6 +28,11 @@ int addnArt();
 
 struct sList * addListit();
 
+
+/**
+ * Adds data to the structure.
+ * @return returns a pointer to a structure with the linked list
+ */
 struct sList * addList();
 
 /**
